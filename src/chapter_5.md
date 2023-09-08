@@ -1,9 +1,9 @@
-[**Calldata Optimizations**](##Calldata%20Optimizations)
+[**Calldata Optimizations**](##Calldata-Optimizations)
 
-- [1. Use vanity addresses (safely!)](##1.%20Use%20vanity%20addresses%20(safely!))
-- [2. Avoid signed integers in calldata if possible](##2.%20Avoid%20signed%20integers%20in%20calldata%20if%20possible)
-- [3. Calldata is (usually) cheaper than memory](##3.%20Calldata%20is%20(usually)%20cheaper%20than%20memory)
-- [4. Consider packing calldata, especially on an L2](##4.%20Consider%20packing%20calldata,%20especially%20on%20an%20L2)
+- [1. Use vanity addresses (safely!)](##1.-Use-vanity-addresses-(safely!))
+- [2. Avoid signed integers in calldata if possible](##2.-Avoid-signed-integers-in-calldata-if-possible)
+- [3. Calldata is (usually) cheaper than memory](##3.-Calldata-is-(usually)-cheaper-than-memory)
+- [4. Consider packing calldata, especially on an L2](##4.-Consider-packing-calldata,-especially-on-an-L2)
 
 ## Calldata Optimizations
 

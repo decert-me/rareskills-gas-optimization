@@ -1,14 +1,14 @@
-[**Saving Gas On Deployment**](##Saving%20Gas%20On%20Deployment)
+[**Saving Gas On Deployment**](##Saving-Gas-On-Deployment)
 
-- [1. Use the account nonce to predict the addresses of interdependent smart contracts thereby avoiding storage variables and address setter functions](##1.%20Use%20the%20account%20nonce%20to%20predict%20the%20addresses%20of%20interdependent%20smart%20contracts%20thereby%20avoiding%20storage%20variables%20and%20address%20setter%20functions)
-- [2. Make constructors payable](##2.%20Make%20constructors%20payable)
-- [3. Deployment size can be reduced by optimizing the IPFS hash to have more zeros (or using the --no-cbor-metadata compiler option)](##3.%20Deployment%20size%20can%20be%20reduced%20by%20optimizing%20the%20IPFS%20hash%20to%20have%20more%20zeros%20(or%20using%20the%20--no-cbor-metadata%20compiler%20option))
-- [4. Use selfdestruct in the constructor if the contract is one-time use](##4.%20Use%20selfdestruct%20in%20the%20constructor%20if%20the%20contract%20is%20one-time%20use)
-- [5. Understand the trade-offs when choosing between internal functions and modifiers](##5.%20Understand%20the%20trade-offs%20when%20choosing%20between%20internal%20functions%20and%20modifiers)
-- [6. Use clones or metaproxies when deploying very similar smart contracts that are not called frequently](##6.%20Use%20clones%20or%20metaproxies%20when%20deploying%20very%20similar%20smart%20contracts%20that%20are%20not%20called%20frequently)
-- [7. Admin functions can be payable](##7.%20Admin%20functions%20can%20be%20payable)
-- [8. Custom errors are (usually) smaller than require statements](##8.%20Custom%20errors%20are%20(usually)%20smaller%20than%20require%20statements)
-- [9. Use existing create2 factories instead of deploying your own](##9.%20Use%20existing%20create2%20factories%20instead%20of%20deploying%20your%20own)
+- [1. Use the account nonce to predict the addresses of interdependent smart contracts thereby avoiding storage variables and address setter functions](##1.-Use-the-account-nonce-to-predict-the-addresses-of-interdependent-smart-contracts-thereby-avoiding-storage-variables-and-address-setter-functions)
+- [2. Make constructors payable](##2.-Make-constructors-payable)
+- [3. Deployment size can be reduced by optimizing the IPFS hash to have more zeros (or using the --no-cbor-metadata compiler option)](##3.-Deployment-size-can-be-reduced-by-optimizing-the-IPFS-hash-to-have-more-zeros-(or-using-the---no-cbor-metadata-compiler-option))
+- [4. Use selfdestruct in the constructor if the contract is one-time use](##4.-Use-selfdestruct-in-the-constructor-if-the-contract-is-one-time-use)
+- [5. Understand the trade-offs when choosing between internal functions and modifiers](##5.-Understand-the-trade-offs-when-choosing-between-internal-functions-and-modifiers)
+- [6. Use clones or metaproxies when deploying very similar smart contracts that are not called frequently](##6.-Use-clones-or-metaproxies-when-deploying-very-similar-smart-contracts-that-are-not-called-frequently)
+- [7. Admin functions can be payable](##7.-Admin-functions-can-be-payable)
+- [8. Custom errors are (usually) smaller than require statements](##8.-Custom-errors-are-(usually)-smaller-than-require-statements)
+- [9. Use existing create2 factories instead of deploying your own](##9.-Use-existing-create2-factories-instead-of-deploying-your-own)
 
 
 

@@ -1,7 +1,7 @@
-[**Outdated tricks**](##Outdated%20tricks)
+[**Outdated tricks**](##Outdated-tricks)
 
-- [1. external is cheaper than public](##1.%20external%20is%20cheaper%20than%20public)
-- [2. != 0 is cheaper than > 0](##2.%20!=%200%20is%20cheaper%20than%20>%200)
+- [1. external is cheaper than public](##1.-external-is-cheaper-than-public)
+- [2. != 0 is cheaper than > 0](##2.-!=-0-is-cheaper-than->-0)
 
 ## Outdated tricks
 

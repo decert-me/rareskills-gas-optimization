@@ -1,14 +1,14 @@
-[**Assembly tricks**](##Assembly%20tricks)
+[**Assembly tricks**](##Assembly-tricks)
 
-- [1. Using assembly to revert with an error message](##1.%20Using%20assembly%20to%20revert%20with%20an%20error%20message)
-- [2. Calling functions via interface incurs memory expansion costs, so use assembly to re-use data already in memory](##2.%20Calling%20functions%20via%20interface%20incurs%20memory%20expansion%20costs,%20so%20use%20assembly%20to%20re-use%20data%20already%20in%20memory)
-- [3. Common math operations, like min and max have gas efficient alternatives](##3.%20Common%20math%20operations,%20like%20min%20and%20max%20have%20gas%20efficient%20alternatives)
-- [4. Use SUB or XOR instead of ISZERO(EQ()) to check for inequality (more efficient in certain scenarios)](##4.%20Use%20SUB%20or%20XOR%20instead%20of%20ISZERO(EQ()%29%20to%20check%20for%20inequality%20(more%20efficient%20in%20certain%20scenarios))
-- [5. Use inline assembly to check for address(0)](##5.%20Use%20inline%20assembly%20to%20check%20for%20address(0))
-- [6. selfbalance is cheaper than address(this).balance (more efficient in certain scenarios)](##6.%20selfbalance%20is%20cheaper%20than%20address(this).balance%20(more%20efficient%20in%20certain%20scenarios))
-- [7. Use assembly to perform operations on data of size 96 bytes or less: hashing and unindexed data in events](##7.%20Use%20assembly%20to%20perform%20operations%20on%20data%20of%20size%2096%20bytes%20or%20less:%20hashing%20and%20unindexed%20data%20in%20events)
-- [8. Use assembly to reuse memory space when making more than one external call.](##8.%20Use%20assembly%20to%20reuse%20memory%20space%20when%20making%20more%20than%20one%20external%20call.)
-- [9. Use assembly to reuse memory space when creating more than one contract.](##9.%20Use%20assembly%20to%20reuse%20memory%20space%20when%20creating%20more%20than%20one%20contract.)
+- [1. Using assembly to revert with an error message](##1.-Using-assembly-to-revert-with-an-error-message)
+- [2. Calling functions via interface incurs memory expansion costs, so use assembly to re-use data already in memory](##2.-Calling-functions-via-interface-incurs-memory-expansion-costs,-so-use-assembly-to-re-use-data-already-in-memory)
+- [3. Common math operations, like min and max have gas efficient alternatives](##3.-Common-math-operations,-like-min-and-max-have-gas-efficient-alternatives)
+- [4. Use SUB or XOR instead of ISZERO(EQ()) to check for inequality (more efficient in certain scenarios)](##4.-Use-SUB-or-XOR-instead-of-ISZERO(EQ()%29-to-check-for-inequality-(more-efficient-in-certain-scenarios))
+- [5. Use inline assembly to check for address(0)](##5.-Use-inline-assembly-to-check-for-address(0))
+- [6. selfbalance is cheaper than address(this).balance (more efficient in certain scenarios)](##6.-selfbalance-is-cheaper-than-address(this).balance-(more-efficient-in-certain-scenarios))
+- [7. Use assembly to perform operations on data of size 96 bytes or less: hashing and unindexed data in events](##7.-Use-assembly-to-perform-operations-on-data-of-size-96-bytes-or-less:-hashing-and-unindexed-data-in-events)
+- [8. Use assembly to reuse memory space when making more than one external call.](##8.-Use-assembly-to-reuse-memory-space-when-making-more-than-one-external-call.)
+- [9. Use assembly to reuse memory space when creating more than one contract.](##9.-Use-assembly-to-reuse-memory-space-when-creating-more-than-one-contract.)
 
 
 
