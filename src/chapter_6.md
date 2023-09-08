@@ -3,7 +3,7 @@
 - [1. Using assembly to revert with an error message](##1.-Using-assembly-to-revert-with-an-error-message)
 - [2. Calling functions via interface incurs memory expansion costs, so use assembly to re-use data already in memory](##2.-Calling-functions-via-interface-incurs-memory-expansion-costs,-so-use-assembly-to-re-use-data-already-in-memory)
 - [3. Common math operations, like min and max have gas efficient alternatives](##3.-Common-math-operations,-like-min-and-max-have-gas-efficient-alternatives)
-- [4. Use SUB or XOR instead of ISZERO(EQ()) to check for inequality (more efficient in certain scenarios)](##4.-Use-SUB-or-XOR-instead-of-ISZERO(EQ()%29-to-check-for-inequality-(more-efficient-in-certain-scenarios))
+- [4. Use SUB or XOR instead of ISZERO(EQ()) to check for inequality (more efficient in certain scenarios)](##4.-Use-SUB-or-XOR-instead-of-ISZERO(EQ())-to-check-for-inequality-(more-efficient-in-certain-scenarios))
 - [5. Use inline assembly to check for address(0)](##5.-Use-inline-assembly-to-check-for-address(0))
 - [6. selfbalance is cheaper than address(this).balance (more efficient in certain scenarios)](##6.-selfbalance-is-cheaper-than-address(this).balance-(more-efficient-in-certain-scenarios))
 - [7. Use assembly to perform operations on data of size 96 bytes or less: hashing and unindexed data in events](##7.-Use-assembly-to-perform-operations-on-data-of-size-96-bytes-or-less:-hashing-and-unindexed-data-in-events)
