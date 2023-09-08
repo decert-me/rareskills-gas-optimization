@@ -1,12 +1,12 @@
-[**Dangerous techniques**](##Dangerous techniques)
+[**Dangerous techniques**](##Dangerous%20techniques)
 
-- [1. Use gasprice() or msg.value to pass information](##1. Use gasprice() or msg.value to pass information)
-- [2. Manipulate environment variables like coinbase() or block.number if the tests allow it](##2. Manipulate environment variables like coinbase() or block.number if the tests allow it)
-- [3. Use gasleft() to branch decisions at key points](##3. Use gasleft() to branch decisions at key points)
-- [4. Use send() to move ether, but don’t check for success](##4. Use send() to move ether, but don’t check for success)
-- [5. Make all functions payable](##5. Make all functions payable)
-- [6. External library jumping](##6. External library jumping)
-- [7. Append bytecode to the end of the contract to create a highly optimized subroutine](##7. Append bytecode to the end of the contract to create a highly optimized subroutine)
+- [1. Use gasprice() or msg.value to pass information](##1.%20Use%20gasprice()%20or%20msg.value%20to%20pass%20information)
+- [2. Manipulate environment variables like coinbase() or block.number if the tests allow it](##2.%20Manipulate%20environment%20variables%20like%20coinbase()%20or%20block.number%20if%20the%20tests%20allow%20it)
+- [3. Use gasleft() to branch decisions at key points](##3.%20Use%20gasleft()%20to%20branch%20decisions%20at%20key%20points)
+- [4. Use send() to move ether, but don’t check for success](##4.%20Use%20send()%20to%20move%20ether,%20but%20don’t%20check%20for%20success)
+- [5. Make all functions payable](##5.%20Make%20all%20functions%20payable)
+- [6. External library jumping](##6.%20External%20library%20jumping)
+- [7. Append bytecode to the end of the contract to create a highly optimized subroutine](##7.%20Append%20bytecode%20to%20the%20end%20of%20the%20contract%20to%20create%20a%20highly%20optimized%20subroutine)
 
 
 ## Dangerous techniques

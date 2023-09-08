@@ -1,11 +1,11 @@
-[**Cross contract calls**](##Cross contract calls)
+[**Cross contract calls**](##Cross%20contract%20calls)
 
-- [1. Use transfer hooks for tokens instead of initiating a transfer from the destination smart contract](##1. Use transfer hooks for tokens instead of initiating a transfer from the destination smart contract)
-- [2. Use fallback or receive instead of deposit() when transferring Ether](##2. Use fallback or receive instead of deposit() when transferring Ether)
-- [3. Use ERC2930 access list transactions when making cross-contract calls to pre-warm storage slots](##3. Use ERC2930 access list transactions when making cross-contract calls to pre-warm storage slots)
-- [4. Cache calls to external contracts where it makes sense (like caching return data from chainlink oracle)](##4. Cache calls to external contracts where it makes sense (like caching return data from chainlink oracle))
-- [5. Implement multicall in router-like contracts](##5. Implement multicall in router-like contracts)
-- [6. Avoid contract calls by making the architecture monolithic](##6. Avoid contract calls by making the architecture monolithic)
+- [1. Use transfer hooks for tokens instead of initiating a transfer from the destination smart contract](##1.%20Use%20transfer%20hooks%20for%20tokens%20instead%20of%20initiating%20a%20transfer%20from%20the%20destination%20smart%20contract)
+- [2. Use fallback or receive instead of deposit() when transferring Ether](##2.%20Use%20fallback%20or%20receive%20instead%20of%20deposit()%20when%20transferring%20Ether)
+- [3. Use ERC2930 access list transactions when making cross-contract calls to pre-warm storage slots](##3.%20Use%20ERC2930%20access%20list%20transactions%20when%20making%20cross-contract%20calls%20to%20pre-warm%20storage%20slots%20and%20contract%20addresses)
+- [4. Cache calls to external contracts where it makes sense (like caching return data from chainlink oracle)](##4.%20Cache%20calls%20to%20external%20contracts%20where%20it%20makes%20sense%20(like%20caching%20return%20data%20from%20chainlink%20oracle))
+- [5. Implement multicall in router-like contracts](##5.%20Implement%20multicall%20in%20router-like%20contracts)
+- [6. Avoid contract calls by making the architecture monolithic](##6.%20Avoid%20contract%20calls%20by%20making%20the%20architecture%20monolithic)
 
 
 ## Cross contract calls
