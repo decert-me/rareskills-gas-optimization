@@ -1,6 +1,6 @@
 [book]
 authors = ["0xdwong"]
-language = "en"
+language = "zh-cn"
 multilingual = false
-src = "src"
+src = "src/zh"
 title = "Rareskills Gas 优化手册"
