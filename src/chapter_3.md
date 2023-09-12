@@ -1,14 +1,12 @@
-[**Cross contract calls**](##Cross-contract-calls)
+# Cross contract calls
 
-- [1. Use transfer hooks for tokens instead of initiating a transfer from the destination smart contract](##1.-Use-transfer-hooks-for-tokens-instead-of-initiating-a-transfer-from-the-destination-smart-contract)
-- [2. Use fallback or receive instead of deposit() when transferring Ether](##2.-Use-fallback-or-receive-instead-of-deposit()-when-transferring-Ether)
-- [3. Use ERC2930 access list transactions when making cross-contract calls to pre-warm storage slots](##3.-Use-ERC2930-access-list-transactions-when-making-cross-contract-calls-to-pre-warm-storage-slots-and-contract-addresses)
-- [4. Cache calls to external contracts where it makes sense (like caching return data from chainlink oracle)](##4.-Cache-calls-to-external-contracts-where-it-makes-sense-(like-caching-return-data-from-chainlink-oracle))
-- [5. Implement multicall in router-like contracts](##5.-Implement-multicall-in-router-like-contracts)
-- [6. Avoid contract calls by making the architecture monolithic](##6.-Avoid-contract-calls-by-making-the-architecture-monolithic)
+- [1. Use transfer hooks for tokens instead of initiating a transfer from the destination smart contract](#1-use-transfer-hooks-for-tokens-instead-of-initiating-a-transfer-from-the-destination-smart-contract)
+- [2. Use fallback or receive instead of deposit() when transferring Ether](#2-use-fallback-or-receive-instead-of-deposit-when-transferring-ether)
+- [3. Use ERC2930 access list transactions when making cross-contract calls to pre-warm storage slots](#3-use-erc2930-access-list-transactions-when-making-cross-contract-calls-to-pre-warm-storage-slots-and-contract-addresses)
+- [4. Cache calls to external contracts where it makes sense (like caching return data from chainlink oracle)](#4-cache-calls-to-external-contracts-where-it-makes-sense-like-caching-return-data-from-chainlink-oracle)
+- [5. Implement multicall in router-like contracts](#5-implement-multicall-in-router-like-contracts)
+- [6. Avoid contract calls by making the architecture monolithic](#6-avoid-contract-calls-by-making-the-architecture-monolithic)
 
-
-## Cross contract calls
 
 ## 1. Use transfer hooks for tokens instead of initiating a transfer from the destination smart contract
 

@@ -1,18 +1,16 @@
-[**Design Patterns**](##Design-Patterns)
+# Design Patterns
 
-- [1. Use multidelegatecall to batch transactions](##1.-Use-multidelegatecall-to-batch-transactions)
-- [2. Use ECDSA signatures instead of merkle trees for allowlists and airdrops](##2.-Use-ECDSA-signatures-instead-of-merkle-trees-for-allowlists-and-airdrops)
-- [3. Use ERC20Permit to batch the approval and transfer step in on transaction](##3.-Use-ERC20Permit-to-batch-the-approval-and-transfer-step-in-on-transaction)
-- [4. Use L2 message passing for games or other high-throughput, low transaction value applications](##4.-Use-L2-message-passing-for-games-or-other-high-throughput,-low-transaction-value-applications)
-- [5. Use state-channels if applicable](##5.-Use-state-channels-if-applicable)
-- [6. Use voting delegation as a gas saving measure](##6.-Use-voting-delegation-as-a-gas-saving-measure)
-- [7. ERC1155 is a cheaper non-fungible token than ERC721](##7.-ERC1155-is-a-cheaper-non-fungible-token-than-ERC721)
-- [8. Use one ERC1155 or ERC6909 token instead of several ERC20 tokens](##8.-Use-one-ERC1155-or-ERC6909-token-instead-of-several-ERC20-tokens)
-- [9. The UUPS upgrade pattern is more gas efficient for users than the Transparent Upgradeable Proxy](##9.-The-UUPS-upgrade-pattern-is-more-gas-efficient-for-users-than-the-Transparent-Upgradeable-Proxy)
-- [10. Consider using alternatives to OpenZeppelin](##10.-Consider-using-alternatives-to-OpenZeppelin)
+- [1. Use multidelegatecall to batch transactions](#1-use-multidelegatecall-to-batch-transactions)
+- [2. Use ECDSA signatures instead of merkle trees for allowlists and airdrops](#2-use-ecdsa-signatures-instead-of-merkle-trees-for-allowlists-and-airdrops)
+- [3. Use ERC20Permit to batch the approval and transfer step in on transaction](#3-use-erc20permit-to-batch-the-approval-and-transfer-step-in-on-transaction)
+- [4. Use L2 message passing for games or other high-throughput, low transaction value applications](#4-use-l2-message-passing-for-games-or-other-high-throughput-low-transaction-value-applications)
+- [5. Use state-channels if applicable](#5-use-state-channels-if-applicable)
+- [6. Use voting delegation as a gas saving measure](#6-use-voting-delegation-as-a-gas-saving-measure)
+- [7. ERC1155 is a cheaper non-fungible token than ERC721](#7-erc1155-is-a-cheaper-non-fungible-token-than-erc721)
+- [8. Use one ERC1155 or ERC6909 token instead of several ERC20 tokens](#8-use-one-erc1155-or-erc6909-token-instead-of-several-erc20-tokens)
+- [9. The UUPS upgrade pattern is more gas efficient for users than the Transparent Upgradeable Proxy](#9-the-uups-upgrade-pattern-is-more-gas-efficient-for-users-than-the-transparent-upgradeable-proxy)
+- [10. Consider using alternatives to OpenZeppelin](#10-consider-using-alternatives-to-openzeppelin)
 
-
-## Design Patterns
 
 ## 1. Use multidelegatecall to batch transactions
 

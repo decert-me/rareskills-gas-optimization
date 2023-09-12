@@ -1,22 +1,22 @@
-[The RareSkills Book of Gas Optimization](##Solidity-Gas-Optimization)
+[The RareSkills Book of Gas Optimization](#solidity-Gas-Optimization)
 
-- [Gas optimization tricks do not always work](##Gas-optimization-tricks-do-not-always-work)
-- [Beware of complexity and readability](##Beware-of-complexity-and-readability)
-- [Comprehensive treatment of each topic isn’t possible here](##Comprehensive-treatment-of-each-topic-isn’t-possible-here)
-- [We do not discuss application-specific tricks](##We-do-not-discuss-application-specific-tricks)
-- [1. Most important: avoid zero to one storage writes where possible](##1.-Most-important:-avoid-zero-to-one-storage-writes-where-possible)
-- [2. Cache storage variables: write and read storage variables exactly once](##2.-Cache-storage-variables:-write-and-read-storage-variables-exactly-once)
-- [3. Pack related variables](##3.-Pack-related-variables)
-- [4. Pack structs](##4.-Pack-structs)
-- [5. Keep strings smaller than 32 bytes](##5.-Keep-strings-smaller-than-32-bytes)
-- [6. Variables that are never updated should be immutable or constant](##6.-Variables-that-are-never-updated-should-be-immutable-or-constant)
-- [7. Using mappings instead of arrays to avoid length checks](##7.-Using-mappings-instead-of-arrays-to-avoid-length-checks)
-- [8. Using unsafeAccess on arrays to avoid redundant length checks](##8.-Using-unsafeAccess-on-arrays-to-avoid-redundant-length-checks)
-- [9. Use bitmaps instead of bools when a significant amount of booleans are used](##9.-Use-bitmaps-instead-of-bools-when-a-significant-amount-of-booleans-are-used)
-- [10. Use SSTORE2 or SSTORE3 to store a lot of data](##10.-Use-SSTORE2-or-SSTORE3-to-store-a-lot-of-data)
-- [11. Use storage pointers instead of memory where appropriate](##11.-Use-storage-pointers-instead-of-memory-where-appropriate)
-- [12. Avoid having ERC20 token balances go to zero, always keep a small amount](##12.-Avoid-having-ERC20-token-balances-go-to-zero,-always-keep-a-small-amount)
-- [13. Count from n to zero instead of counting from zero to n](##13.-Count-from-n-to-zero-instead-of-counting-from-zero-to-n)
+- [Gas optimization tricks do not always work](#gas-optimization-tricks-do-not-always-work)
+- [Beware of complexity and readability](#beware-of-complexity-and-readability)
+- [Comprehensive treatment of each topic isn’t possible here](#comprehensive-treatment-of-each-topic-isnt-possible-here)
+- [We do not discuss application-specific tricks](#we-do-not-discuss-application-specific-tricks)
+- [1. Most important: avoid zero to one storage writes where possible](#1-most-important-avoid-zero-to-one-storage-writes-where-possible)
+- [2. Cache storage variables: write and read storage variables exactly once](#2-cache-storage-variables-write-and-read-storage-variables-exactly-once)
+- [3. Pack related variables](#3-pack-related-variables)
+- [4. Pack structs](#4-pack-structs)
+- [5. Keep strings smaller than 32 bytes](#5-keep-strings-smaller-than-32-bytes)
+- [6. Variables that are never updated should be immutable or constant](#6-variables-that-are-never-updated-should-be-immutable-or-constant)
+- [7. Using mappings instead of arrays to avoid length checks](#7-using-mappings-instead-of-arrays-to-avoid-length-checks)
+- [8. Using unsafeAccess on arrays to avoid redundant length checks](#8-using-unsafeaccess-on-arrays-to-avoid-redundant-length-checks)
+- [9. Use bitmaps instead of bools when a significant amount of booleans are used](#9-use-bitmaps-instead-of-bools-when-a-significant-amount-of-booleans-are-used)
+- [10. Use SSTORE2 or SSTORE3 to store a lot of data](#10-use-sstore2-or-sstore3-to-store-a-lot-of-data)
+- [11. Use storage pointers instead of memory where appropriate](#11-use-storage-pointers-instead-of-memory-where-appropriate)
+- [12. Avoid having ERC20 token balances go to zero, always keep a small amount](#12-avoid-having-erc20-token-balances-go-to-zero-always-keep-a-small-amount)
+- [13. Count from n to zero instead of counting from zero to n](#13-count-from-n-to-zero-instead-of-counting-from-zero-to-n)
 
 
 ## Solidity Gas Optimization
@@ -74,6 +74,8 @@ The purpose of this article is to be the most comprehensive list of tricks out t
 ## We do not discuss application-specific tricks
 
 There are gas-efficient was to determine if a number is prime for example, but this is so rarely needed that dedicating space to it would lower the value of this article. Similarly, in our [Tornado Cash tutorial](https://www.rareskills.io/post/how-does-tornado-cash-work), we suggest ways the codebase could be made more efficient, but including that treatment here would not benefit readers as it is too application specific.
+
+---
 
 ## 1. Most important: avoid zero to one storage writes where possible
 
@@ -233,7 +235,7 @@ contract Packed_Struct {
 }
 ```
 
-## 5. Keep strings smaller than 32 bytes
+### 5. Keep strings smaller than 32 bytes
 
 In Solidity, strings are variable length dynamic data types, meaning their length can change and grow as needed.
 

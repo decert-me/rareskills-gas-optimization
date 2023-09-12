@@ -1,15 +1,15 @@
-[**Dangerous techniques**](##Dangerous-techniques)
+# Dangerous techniques
 
-- [1. Use gasprice() or msg.value to pass information](##1.-Use-gasprice()-or-msg.value-to-pass-information)
-- [2. Manipulate environment variables like coinbase() or block.number if the tests allow it](##2.-Manipulate-environment-variables-like-coinbase()-or-block.number-if-the-tests-allow-it)
-- [3. Use gasleft() to branch decisions at key points](##3.-Use-gasleft()-to-branch-decisions-at-key-points)
-- [4. Use send() to move ether, but don’t check for success](##4.-Use-send()-to-move-ether,-but-don’t-check-for-success)
-- [5. Make all functions payable](##5.-Make-all-functions-payable)
-- [6. External library jumping](##6.-External-library-jumping)
-- [7. Append bytecode to the end of the contract to create a highly optimized subroutine](##7.-Append-bytecode-to-the-end-of-the-contract-to-create-a-highly-optimized-subroutine)
+- [1. Use gasprice() or msg.value to pass information](#1-use-gasprice-or-msgvalue-to-pass-information)
+- [2. Manipulate environment variables like coinbase() or block.number if the tests allow it](#2-manipulate-environment-variables-like-coinbase-or-blocknumber-if-the-tests-allow-it)
+- [3. Use gasleft() to branch decisions at key points](#3-use-gasleft-to-branch-decisions-at-key-points)
+- [4. Use send() to move ether, but don’t check for success](#4-use-send-to-move-ether-but-dont-check-for-success)
+- [5. Make all functions payable](#5-make-all-functions-payable)
+- [6. External library jumping](#6-external-library-jumping)
+- [7. Append bytecode to the end of the contract to create a highly optimized subroutine](#7-append-bytecode-to-the-end-of-the-contract-to-create-a-highly-optimized-subroutine)
 
 
-## Dangerous techniques
+
 
 If you are participating in a gas optimization contest, then these unusual design patterns can help, but using them in production is highly discouraged, or at the very least should be done with extreme caution.
 

@@ -1,29 +1,29 @@
-[**Solidity Compiler Related**](##Solidity-Compiler-Related)
+# Solidity Compiler Related
 
-- [1. Prefer strict inequalities over non-strict inequalities, but test both alternatives](##1.-Prefer-strict-inequalities-over-non-strict-inequalities,-but-test-both-alternatives)
-- [2. Split require statements that have boolean expressions](##2.-Split-require-statements-that-have-boolean-expressions)
-- [3. Split revert statements](##3.-Split-revert-statements)
-- [4. Always use Named Returns](##4.-Always-use-Named-Returns)
-- [5. Invert if-else statements that have a negation](##5.-Invert-if-else-statements-that-have-a-negation)
-- [6. Use ++i instead of i++ to increment](##6.-Use-++i-instead-of-i++-to-increment)
-- [7. Use unchecked math where appropriate](##7.-Use-unchecked-math-where-appropriate)
-- [8. Write gas-optimal for-loops](##8.-Write-gas-optimal-for-loops)
-- [9. Do-While loops are cheaper than for loops](##9.-Do-While-loops-are-cheaper-than-for-loops)
-- [10. Avoid Unnecessary Variable Casting, variables smaller than uint256 (including boolean and address) are less efficient unless packed](##10.-Avoid-Unnecessary-Variable-Casting,-variables-smaller-than-uint256-(including-boolean-and-address)-are-less-efficient-unless-packed)
-- [11. Short-circuit booleans](##11.-Short-circuit-booleans)
-- [12. Don’t make variables public unless it is necessary to do so](##12.-Don’t-make-variables-public-unless-it-is-necessary-to-do-so)
-- [13. Prefer very large values for the optimizer](##13.-Prefer-very-large-values-for-the-optimizer)
-- [14. Heavily used functions should have optimal names](##14.-Heavily-used-functions-should-have-optimal-names)
-- [15. Bitshifting is cheaper than multiplying or dividing by a power of two](##15.-Bitshifting-is-cheaper-than-multiplying-or-dividing-by-a-power-of-two)
-- [16. It is sometimes cheaper to cache calldata](##16.-It-is-sometimes-cheaper-to-cache-calldata)
-- [17. Use branchless algorithms as a replacement for conditionals and loops](##17.-Use-branchless-algorithms-as-a-replacement-for-conditionals-and-loops)
-- [18. Internal functions only used once can be inlined to save gas](##18.-Internal-functions-only-used-once-can-be-inlined-to-save-gas)
-- [19. Compare array equality and string equality by hashing them if they are longer than 32 bytes](##19.-Compare-array-equality-and-string-equality-by-hashing-them-if-they-are-longer-than-32-bytes)
-- [20. Use lookup tables when computing powers and logarithms](##20.-Use-lookup-tables-when-computing-powers-and-logarithms)
-- [Precompiled contracts may be useful for some multiplication or memory operations.](##Precompiled-contracts-may-be-useful-for-some-multiplication-or-memory-operations.)
+- [1. Prefer strict inequalities over non-strict inequalities, but test both alternatives](#1-prefer-strict-inequalities-over-non-strict-inequalities-but-test-both-alternatives)
+- [2. Split require statements that have boolean expressions](#2-split-require-statements-that-have-boolean-expressions)
+- [3. Split revert statements](#3-split-revert-statements)
+- [4. Always use Named Returns](#4-always-use-named-returns)
+- [5. Invert if-else statements that have a negation](#5-invert-if-else-statements-that-have-a-negation)
+- [6. Use ++i instead of i++ to increment](#6-use-i-instead-of-i-to-increment)
+- [7. Use unchecked math where appropriate](#7-use-unchecked-math-where-appropriate)
+- [8. Write gas-optimal for-loops](#8-write-gas-optimal-for-loops)
+- [9. Do-While loops are cheaper than for loops](#9-do-while-loops-are-cheaper-than-for-loops)
+- [10. Avoid Unnecessary Variable Casting, variables smaller than uint256 (including boolean and address) are less efficient unless packed](#10-avoid-unnecessary-variable-casting-variables-smaller-than-uint256-including-boolean-and-address-are-less-efficient-unless-packed)
+- [11. Short-circuit booleans](#11-short-circuit-booleans)
+- [12. Don’t make variables public unless it is necessary to do so](#12-dont-make-variables-public-unless-it-is-necessary-to-do-so)
+- [13. Prefer very large values for the optimizer](#13-prefer-very-large-values-for-the-optimizer)
+- [14. Heavily used functions should have optimal names](#14-heavily-used-functions-should-have-optimal-names)
+- [15. Bitshifting is cheaper than multiplying or dividing by a power of two](#15-bitshifting-is-cheaper-than-multiplying-or-dividing-by-a-power-of-two)
+- [16. It is sometimes cheaper to cache calldata](#16-it-is-sometimes-cheaper-to-cache-calldata)
+- [17. Use branchless algorithms as a replacement for conditionals and loops](#17-use-branchless-algorithms-as-a-replacement-for-conditionals-and-loops)
+- [18. Internal functions only used once can be inlined to save gas](#18-internal-functions-only-used-once-can-be-inlined-to-save-gas)
+- [19. Compare array equality and string equality by hashing them if they are longer than 32 bytes](#19-compare-array-equality-and-string-equality-by-hashing-them-if-they-are-longer-than-32-bytes)
+- [20. Use lookup tables when computing powers and logarithms](#20-use-lookup-tables-when-computing-powers-and-logarithms)
+- [Precompiled contracts may be useful for some multiplication or memory operations.](#precompiled-contracts-may-be-useful-for-some-multiplication-or-memory-operations)
 
 
-## Solidity Compiler Related
+
 
 The following tricks are known to improve gas efficiency in the Solidity compiler. However, it is expected that the Solidity compiler will improve over time making these tricks less useful or even counterproductive.
 
@@ -33,15 +33,12 @@ Some of these tricks are already incorporated by the compiler when using the --v
 
 Benchmark. Always benchmark.
 
-##  
 
 ## 1. Prefer strict inequalities over non-strict inequalities, but test both alternatives
 
 It is generally recommended to use strict inequalities (<, >) over non-strict inequalities (<=, >=). This is because the compiler will sometimes change a > b to be !(a < b) to accomplish the non-strict inequality. The EVM does not have an opcode for checking less-than-or-equal to or greater-than-or-equal to.
 
 However, you should try both comparisons, because it is not always the case that using the strict inequality will save gas. This is very dependent on the context of the surrounding opcodes.
-
-##  
 
 ## 2. Split require statements that have boolean expressions
 
@@ -156,7 +153,6 @@ The reason behind this is in way ++i and i++ are evaluated by the compiler.
 
 i++ returns i(its old value) before incrementing i to a new value. This means that 2 values are stored on the stack for usage whether you wish to use it or not. ++i on the other hand, evaluates the ++ operation on i (i.e it increments i) then returns i (its incremented value) which means that only one item needs to be stored on the stack.
 
-##  
 
 ## 7. Use unchecked math where appropriate
 
@@ -168,7 +164,6 @@ Solidity uses checked math (i.e it reverts if the result of a math operation ove
 
 Whenever you see arithmetic in code, ask yourself if there is a natural guard to overflow or underflow in the context (keep in mind the type of the variable holding the number too). If so, add an unchecked block.
 
-##  
 
 ## 8. Write gas-optimal for-loops
 
@@ -187,7 +182,6 @@ for (uint256 i; i < limit; ) {
 
 The two differences here from a conventional for loop is that i++ becomes ++i (as noted above), and it is unchecked because the limit variable ensures it won’t overflow.
 
-##  
 
 ## 9. Do-While loops are cheaper than for loops
 
@@ -265,7 +259,6 @@ This is similar for the expression require(msg.sender == owner && msg.sender == 
 
 Short-circuiting is useful and it’s recommended to place the less expensive expression first, as the more costly one might be bypassed. If the second expression is more important than the first, it might be worth reversing their order so that the cheaper one gets evaluated first.
 
-##  
 
 ## 12. Don’t make variables public unless it is necessary to do so
 
@@ -275,7 +268,6 @@ Remember, private variables aren’t private, it’s not difficult to extract th
 
 This is especially true for constants which are meant to be read by humans rather than smart contracts.
 
-##  
 
 ## 13. Prefer very large values for the optimizer
 
@@ -292,7 +284,6 @@ Conversely, larger values of the runs parameter prioritize the execution cost. T
 
 Considering this trade-off, if your contract will be used frequently it is advisable to use a larger value for the optimizer. As this will save up gas costs in a long term.
 
-##  
 
 ## 14. Heavily used functions should have optimal names
 
@@ -391,7 +382,6 @@ If you need to take logarithms or powers where the base or the power is a fracti
 
 Consider the [Bancor Formula](https://github.com/AragonBlack/fundraising/blob/master/apps/bancor-formula/contracts/BancorFormula.sol#L293) and [Uniswap V3 Tick Math](https://github.com/Uniswap/v3-core/blob/main/contracts/libraries/TickMath.sol#L23) as examples.
 
-##  
 
 ## Precompiled contracts may be useful for some multiplication or memory operations.
 

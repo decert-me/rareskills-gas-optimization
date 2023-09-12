@@ -1,11 +1,10 @@
-[**Calldata Optimizations**](##Calldata-Optimizations)
+# Calldata Optimizations
 
-- [1. Use vanity addresses (safely!)](##1.-Use-vanity-addresses-(safely!))
-- [2. Avoid signed integers in calldata if possible](##2.-Avoid-signed-integers-in-calldata-if-possible)
-- [3. Calldata is (usually) cheaper than memory](##3.-Calldata-is-(usually)-cheaper-than-memory)
-- [4. Consider packing calldata, especially on an L2](##4.-Consider-packing-calldata,-especially-on-an-L2)
+- [1. Use vanity addresses (safely!)](#1-use-vanity-addresses-safely)
+- [2. Avoid signed integers in calldata if possible](#2-avoid-signed-integers-in-calldata-if-possible)
+- [3. Calldata is (usually) cheaper than memory](#3-calldata-is-usually-cheaper-than-memory)
+- [4. Consider packing calldata, especially on an L2](#4-consider-packing-calldata-especially-on-an-l2)
 
-## Calldata Optimizations
 
 Ethereum charges 4 gas for a zero byte of calldata and 16 gas for a non-zero byte. This is true during a normal function call and during deployment. Because of this, Solidity optimizers try to use zeros where possible.
 
