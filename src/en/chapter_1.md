@@ -1,4 +1,4 @@
-[The RareSkills Book of Gas Optimization](#solidity-Gas-Optimization)
+# The RareSkills Book of Gas Optimization
 
 - [Gas optimization tricks do not always work](#gas-optimization-tricks-do-not-always-work)
 - [Beware of complexity and readability](#beware-of-complexity-and-readability)
