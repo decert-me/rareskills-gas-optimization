@@ -220,7 +220,27 @@ contract Loop2 {
 这是因为当使用较小的整数时，EVM会自动将其转换为 uint256。这个转换过程会增加额外的 gas 成本，因此最好从一开始就使用 uint256。
 
 ```
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.20;
+
+contract Unnecessary_Typecasting {
+    uint8 public num;
+
+    function incrementNum() public {
+        num += 1;
+    }
+}
+
+// Uses less gas
+contract NoTypecasting {
+    uint256 public num;
+
+    function incrementNumCheap() public {
+        num += 1;
+    }
+}
 ```
+
 ## 11. 短路布尔运算
 
 在 Solidity 中，当你评估一个布尔表达式（例如 ||（逻辑或）或 &&（逻辑与）运算符）时，在 || 的情况下，只有在第一个表达式评估为 false 时才会评估第二个表达式，在 && 的情况下，只有在第一个表达式评估为 true 时才会评估第二个表达式。这被称为短路。
