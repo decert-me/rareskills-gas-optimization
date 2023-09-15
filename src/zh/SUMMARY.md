@@ -1,8 +1,8 @@
 # 概述
 
 - [概述](./README.md)
-- [Gas 优化的 RareSkills 书籍](./chapter_1.md)
-- [部署时节省 Gas](./chapter_2.md)
+- [gas 优化的 RareSkills 书籍](./chapter_1.md)
+- [部署时节省 gas](./chapter_2.md)
 - [跨合约调用](./chapter_3.md)
 - [设计模式](./chapter_4.md)
 - [Calldata 优化](./chapter_5.md)
