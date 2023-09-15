@@ -9,5 +9,6 @@
 - [Solidity Compiler Related](./chapter_7.md)
 - [Dangerous techniques](./chapter_8.md)
 - [Outdated tricks](./chapter_9.md)
+- [Epilogue](./chapter_10.md)
 
 
