@@ -7,7 +7,7 @@
 - [5. 反转具有否定的 if-else 语句](#5-invert-if-else-statements-that-have-a-negation)
 - [6. 使用 ++i 而不是 i++ 进行递增](#6-use-i-instead-of-i-to-increment)
 - [7. 在适当的情况下使用未检查的数学运算](#7-use-unchecked-math-where-appropriate)
-- [8. 编写燃气优化的 for 循环](#8-write-gas-optimal-for-loops)
+- [8. 编写 Gas 优化的 for 循环](#8-write-gas-optimal-for-loops)
 - [9. Do-While 循环比 for 循环更便宜](#9-do-while-loops-are-cheaper-than-for-loops)
 - [10. 避免不必要的变量转换，小于 uint256 的变量（包括布尔值和地址）效率较低，除非打包](#10-avoid-unnecessary-variable-casting-variables-smaller-than-uint256-including-boolean-and-address-are-less-efficient-unless-packed)
 - [11. 短路布尔运算](#11-short-circuit-booleans)
@@ -17,31 +17,31 @@
 - [15. 位移比乘法或除法更便宜，特别是 2 的幂次方](#15-bitshifting-is-cheaper-than-multiplying-or-dividing-by-a-power-of-two)
 - [16. 有时缓存 calldata 更便宜](#16-it-is-sometimes-cheaper-to-cache-calldata)
 - [17. 使用无分支算法替代条件语句和循环](#17-use-branchless-algorithms-as-a-replacement-for-conditionals-and-loops)
-- [18. 只使用一次的内部函数可以内联以节省燃气](#18-internal-functions-only-used-once-can-be-inlined-to-save-gas)
+- [18. 只使用一次的内部函数可以内联以节省 Gas ](#18-internal-functions-only-used-once-can-be-inlined-to-save-gas)
 - [19. 如果数组或字符串长度超过 32 字节，则通过哈希比较它们的相等性](#19-compare-array-equality-and-string-equality-by-hashing-them-if-they-are-longer-than-32-bytes)
 - [20. 在计算幂和对数时使用查找表](#20-use-lookup-tables-when-computing-powers-and-logarithms)
 - [预编译合约可能对某些乘法或内存操作有用。](#precompiled-contracts-may-be-useful-for-some-multiplication-or-memory-operations)
 
-以下的技巧被认为可以提高Solidity编译器的燃气效率。然而，预计随着时间的推移，Solidity编译器会不断改进，使得这些技巧变得不那么有用甚至适得其反。
+以下的技巧被认为可以提高 Solidity 编译器的 Gas 效率。然而，预计随着时间的推移，Solidity 编译器会不断改进，使得这些技巧变得不那么有用甚至适得其反。
 
 你不应该盲目地使用这里列出的技巧，而是应该对两种选择进行基准测试。
 
-当使用--via-ir编译器标志时，编译器已经将其中一些技巧纳入考虑，但在使用该标志时，这些技巧甚至可能使代码效率降低。
+当使用 `--via-ir` 编译器标志时，编译器已经将其中一些技巧纳入考虑，但在使用该标志时，这些技巧甚至可能使代码效率降低。
 
 进行基准测试。始终进行基准测试。
 
 
 ## 1. 更喜欢使用严格不等式而不是非严格不等式，但要测试两种选择
 
-通常建议使用严格不等式(<, >)而不是非严格不等式(<=, >=)。这是因为编译器有时会将 a > b 改为 !(a < b) 来实现非严格不等式。EVM没有用于检查小于等于或大于等于的操作码。
+通常建议使用严格不等式(<, >)而不是非严格不等式(<=, >=)。这是因为编译器有时会将 a > b 改为 !(a < b) 来实现非严格不等式。EVM 没有用于检查小于等于或大于等于的操作码。
 
-然而，你应该尝试两种比较，因为并不总是使用严格不等式会节省燃气。这在很大程度上取决于周围操作码的上下文。
+然而，你应该尝试两种比较，因为并不总是使用严格不等式会节省 Gas 。这在很大程度上取决于周围操作码的上下文。
 
 ## 2. 将具有布尔表达式的 require 语句拆分
 
 当我们拆分 require 语句时，实际上是在说每个语句必须为真，函数才能继续执行。
 
-如果第一个语句计算结果为 false，函数将立即回滚，后续的 require 语句将不会被检查。这将节省燃气成本，而不是评估下一个 require 语句。
+如果第一个语句计算结果为 false，函数将立即回滚，后续的 require 语句将不会被检查。这将节省 Gas 成本，而不是评估下一个 require 语句。
 
 ```
 // SPDX-License-Identifier: MIT
@@ -65,7 +65,7 @@ contract RequireTwo {
 
 ## 3. 拆分 revert 语句
 
-与拆分 require 语句类似，通过在 if 语句中不使用布尔运算符，通常可以节省一些燃气。
+与拆分 require 语句类似，通过在 if 语句中不使用布尔运算符，通常可以节省一些 Gas 。
 
 ```
 contract CustomErrorBoolLessEfficient {
@@ -95,7 +95,7 @@ contract CustomErrorBoolEfficient {
 
 ## 4. 始终使用命名返回
 
-当变量在返回语句中声明时，Solidity编译器会输出更高效的代码。实际上，很少有例外情况，所以如果你看到一个匿名返回，你应该尝试使用命名返回来确定哪种情况更高效。
+当变量在返回语句中声明时，Solidity 编译器会输出更高效的代码。实际上，很少有例外情况，所以如果你看到一个匿名返回，你应该尝试使用命名返回来确定哪种情况更高效。
 
 ```
 // SPDX-License-Identifier: MIT
@@ -182,24 +182,54 @@ for (uint256 i; i < limit; ) {
 如果你想以优化为代价创建稍微不常规的代码，Solidity 的 do-while 循环比 for 循环更节省 gas，即使你为循环不执行的情况添加了 if 条件检查。
 
 ```
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.20;
+
+// times == 10 in both tests
+contract Loop1 {
+    function loop(uint256 times) public pure {
+        for (uint256 i; i < times;) {
+            unchecked {
+                ++i;
+            }
+        }
+    }
+}
+
+contract Loop2 {
+    function loop(uint256 times) public pure {
+        if (times == 0) {
+            return;
+        }
+
+        uint256 i;
+
+        do {
+            unchecked {
+                ++i;
+            }
+        } while (i < times);
+    }
+}
 ```
-## 10. 避免不必要的变量转换，小于uint256的变量（包括布尔值和地址）效率较低，除非进行打包
 
-在整数方面，最好使用uint256，除非需要较小的整数。
+## 10. 避免不必要的变量转换，小于 uint256 的变量（包括布尔值和地址）效率较低，除非进行打包
 
-这是因为当使用较小的整数时，EVM会自动将其转换为uint256。这个转换过程会增加额外的燃气成本，因此最好从一开始就使用uint256。
+在整数方面，最好使用 uint256，除非需要较小的整数。
+
+这是因为当使用较小的整数时，EVM会自动将其转换为 uint256。这个转换过程会增加额外的 Gas 成本，因此最好从一开始就使用 uint256。
 
 ```
 ```
 ## 11. 短路布尔运算
 
-在Solidity中，当你评估一个布尔表达式（例如||（逻辑或）或&&（逻辑与）运算符）时，在||的情况下，只有在第一个表达式评估为false时才会评估第二个表达式，在&&的情况下，只有在第一个表达式评估为true时才会评估第二个表达式。这被称为短路。
+在 Solidity 中，当你评估一个布尔表达式（例如 ||（逻辑或）或 &&（逻辑与）运算符）时，在 || 的情况下，只有在第一个表达式评估为 false 时才会评估第二个表达式，在 && 的情况下，只有在第一个表达式评估为 true 时才会评估第二个表达式。这被称为短路。
 
-例如，表达式require(msg.sender == owner || msg.sender == manager)将在第一个表达式msg.sender == owner评估为true时通过。第二个表达式msg.sender == manager根本不会被评估。
+例如，表达式 require(msg.sender == owner || msg.sender == manager)将在第一个表达式 msg.sender == owner 评估为 true 时通过。第二个表达式 msg.sender == manager 根本不会被评估。
 
-然而，如果第一个表达式msg.sender == owner评估为false，则第二个表达式msg.sender == manager将被评估以确定整个表达式是true还是false。在这里，通过首先检查最有可能通过的条件，我们可以避免检查第二个条件，从而在大多数成功的调用中节省燃气。
+然而，如果第一个表达式 msg.sender == owner评估为 false，则第二个表达式 msg.sender == manager 将被评估以确定整个表达式是 true 还是 false。在这里，通过首先检查最有可能通过的条件，我们可以避免检查第二个条件，从而在大多数成功的调用中节省 Gas 。
 
-对于表达式require(msg.sender == owner && msg.sender == manager)也是类似的。如果第一个表达式msg.sender == owner评估为false，则不会评估第二个表达式msg.sender == manager，因为整个表达式不能为true。为了使整个语句为true，两边的表达式都必须评估为true。在这里，通过首先检查最有可能失败的条件，我们可以避免检查第二个条件，从而在大多数调用失败时节省燃气。
+对于表达式 require(msg.sender == owner && msg.sender == manager) 也是类似的。如果第一个表达式 msg.sender == owner 评估为 false，则不会评估第二个表达式 msg.sender == manager，因为整个表达式不能为 true。为了使整个语句为 true，两边的表达式都必须评估为 true。在这里，通过首先检查最有可能失败的条件，我们可以避免检查第二个条件，从而在大多数调用失败时节省 Gas 。
 
 短路运算很有用，建议将较便宜的表达式放在前面，因为较昂贵的表达式可能会被绕过。如果第二个表达式比第一个更重要，可能值得颠倒它们的顺序，以便先评估更便宜的表达式。
 
@@ -211,7 +241,6 @@ for (uint256 i; i < limit; ) {
 
 对于常量来说尤其如此，它们是供人类阅读而不是供智能合约使用的。
 
-{/*try-react*/}
 
 ## 13. 优化器应选择非常大的值
 
@@ -220,23 +249,22 @@ Solidity 优化器主要关注两个方面的优化：
 1. 智能合约的部署成本。
 2. 智能合约内部函数的执行成本。
 
-在选择优化器的 runs 参数时需要权衡利弊。
+在选择优化器的 `runs` 参数时需要权衡利弊。
 
-较小的 runs 值优先考虑最小化部署成本，从而得到较小的创建代码，但可能会导致未经优化的运行时代码。虽然这会减少部署时的燃气成本，但在执行时可能不够高效。
+较小的 `runs` 值优先考虑最小化部署成本，从而得到较小的创建代码，但可能会导致未经优化的运行时代码。虽然这会减少部署时的 Gas 成本，但在执行时可能不够高效。
 
-相反，较大的 runs 参数值优先考虑执行成本。这会导致较大的创建代码，但会得到经过优化的运行时代码，执行成本更低。虽然这可能不会显著影响部署时的燃气成本，但在执行时可以显著降低燃气成本。
+相反，较大的 `runs` 参数值优先考虑执行成本。这会导致较大的创建代码，但会得到经过优化的运行时代码，执行成本更低。虽然这可能不会显著影响部署时的 Gas 成本，但在执行时可以显著降低 Gas 成本。
 
-考虑到这种权衡，如果您的合约将经常使用，建议选择较大的优化器值。这将在长期节省燃气成本。
+考虑到这种权衡，如果你的合约将经常使用，建议选择较大的优化器值。这将在长期节省 Gas 成本。
 
-{/*try-react*/}
 
 ## 14. 频繁使用的函数应具有最佳名称
 
 EVM 在函数调用时使用跳转表，并且具有较低十六进制顺序的函数选择器会优先排序，而不是具有较高十六进制顺序的选择器。换句话说，如果同一个合约中存在两个函数选择器，例如 0x000071c3 和 0xa0712d68，那么在合约执行时，具有选择器 0x000071c3 的函数将在具有选择器 0xa0712d68 的函数之前被检查。
 
-因此，如果一个函数经常被使用，它必须具有最佳名称。这种优化会增加它被首先排序的机会，从而节省进一步检查的燃气成本（尽管如果合约中的函数超过四个，EVM 会使用二分搜索而不是线性搜索来查找跳转表）。
+因此，如果一个函数经常被使用，它必须具有最佳名称。这种优化会增加它被首先排序的机会，从而节省进一步检查的 Gas 成本（尽管如果合约中的函数超过四个，EVM 会使用二分搜索而不是线性搜索来查找跳转表）。
 
-这还可以减少calldata的成本（如果函数有前导零，因为零字节的成本为4 gas，非零字节的成本为16 gas）。
+这还可以减少 calldata 的成本（如果函数有前导零，因为零字节的成本为4 gas，非零字节的成本为16 gas）。
 
 下面是一个很好的演示。
 
@@ -259,11 +287,11 @@ contract FunctionWithLeadingZeros {
 }
 ```
 
-此外，我们还有一个有用的工具，名为Solidity Zero Finder，它是用Rust构建的，可以帮助开发人员实现这一点。它可以在这个[GitHub存储库](https://github.com/jeffreyscholz/solidity-zero-finder-rust)中找到。
+此外，我们还有一个有用的工具，名为 Solidity Zero Finder，它是用 Rust 构建的，可以帮助开发人员实现这一点。它可以在这个 [GitHub 存储库](https://github.com/jeffreyscholz/solidity-zero-finder-rust)中找到。
 
 ## 15. 位移比乘法或除法更省gas
 
-在Solidity中，通过位移操作来乘以或除以二的幂次方的数字通常比使用乘法或除法运算符更节省gas。
+在 Solidity 中，通过位移操作来乘以或除以二的幂次方的数字通常比使用乘法或除法运算符更节省 gas。
 
 例如，下面两个表达式是等价的：
 
@@ -279,13 +307,13 @@ contract FunctionWithLeadingZeros {
 8 >> 2 # 将8右移2位
 ```
 
-EVM中的位移操作码（如shr（右移）和shl（左移））的成本为5 gas，而乘法和除法操作（mul和div）的成本为每个3 gas。
+EVM 中的位移操作码（如 shr（右移）和 shl（左移））的成本为5 gas，而乘法和除法操作（mul 和 div）的成本为每个3 gas。
 
-大部分的gas节省也来自于solidity对shr和shl操作没有溢出/下溢或除法检查的事实。在使用这些操作符时要牢记这一点。
+大部分的 gas 节省也来自于 solidity 对 shr 和 shl 操作没有溢出/下溢或除法检查的事实。在使用这些操作符时要牢记这一点。
 
 ## 16. 有时缓存calldata更便宜
 
-尽管calldataload指令是一个廉价的操作码，但solidity编译器有时会输出更便宜的代码，如果您缓存calldataload。这并不总是这样，所以您应该测试两种可能性。
+尽管 calldataload 指令是一个廉价的操作码，但 solidity 编译器有时会输出更便宜的代码，如果你缓存calldataload。这并不总是这样，所以你应该测试两种可能性。
 
 ```
 contract LoopSum {
@@ -303,11 +331,11 @@ contract LoopSum {
 
 ## 17. 使用无分支算法替代条件语句和循环
 
-前面一节中的max代码是无分支算法的一个例子，即它消除了JUMP操作码，而JUMP操作码通常比算术操作码更昂贵。
+前面一节中的 max 代码是无分支算法的一个例子，即它消除了 `JUMP` 操作码，而 `JUMP` 操作码通常比算术操作码更昂贵。
 
-循环中内置了跳转，因此您可能希望考虑[展开循环](https://en.wikipedia.org/wiki/Loop_unrolling)以节省gas。
+循环中内置了跳转，因此你可能希望考虑[展开循环](https://en.wikipedia.org/wiki/Loop_unrolling)以节省 gas。
 
-循环不必完全展开。例如，您可以一次执行两个项目的循环，并将跳转次数减半。
+循环不必完全展开。例如，你可以一次执行两个项目的循环，并将跳转次数减半。
 
 这是一个非常极端的优化，但你应该知道条件跳转和循环会引入稍微昂贵的操作码。
 
@@ -325,7 +353,7 @@ contract LoopSum {
 
 如果需要计算底数或指数为分数的对数或幂，如果底数或指数是固定的，可以预先计算一个查找表。
 
-以 [Bancor Formula](https://github.com/AragonBlack/fundraising/blob/master/apps/bancor-formula/contracts/BancorFormula.sol#L293) 和 [Uniswap V3 Tick Math](https://github.com/Uniswap/v3-core/blob/main/contracts/libraries/TickMath.sol#L23) 为例。
+考虑 [Bancor Formula](https://github.com/AragonBlack/fundraising/blob/master/apps/bancor-formula/contracts/BancorFormula.sol#L293) 和 [Uniswap V3 Tick Math](https://github.com/Uniswap/v3-core/blob/main/contracts/libraries/TickMath.sol#L23) 这些例子。
 
 ## 预编译合约可能对一些乘法或内存操作有用。
 

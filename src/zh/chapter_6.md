@@ -3,30 +3,67 @@
 - [1. 使用汇编来回滚并附带错误消息](#1-using-assembly-to-revert-with-an-error-message)
 - [2. 通过接口调用函数会产生内存扩展成本，因此使用汇编来重用已经存在于内存中的数据](#2-calling-functions-via-interface-incurs-memory-expansion-costs-so-use-assembly-to-re-use-data-already-in-memory)
 - [3. 常见的数学运算，如最小值和最大值，有更高效的替代方法](#3-common-math-operations-like-min-and-max-have-gas-efficient-alternatives)
-- [4. 使用SUB或XOR而不是ISZERO(EQ())来检查不等式（在某些情况下更高效）](#4-use-sub-or-xor-instead-of-iszeroeq-to-check-for-inequality-more-efficient-in-certain-scenarios)
+- [4. 使用 SUB 或 XOR 而不是 ISZERO(EQ())来检查不等式（在某些情况下更高效）](#4-use-sub-or-xor-instead-of-iszeroeq-to-check-for-inequality-more-efficient-in-certain-scenarios)
 - [5. 使用内联汇编来检查地址是否为0](#5-use-inline-assembly-to-check-for-address0)
-- [6. selfbalance比address(this).balance更便宜（在某些情况下更高效）](#6-selfbalance-is-cheaper-than-addressthisbalance-more-efficient-in-certain-scenarios)
+- [6. selfbalance比address(this).balance 更便宜（在某些情况下更高效）](#6-selfbalance-is-cheaper-than-addressthisbalance-more-efficient-in-certain-scenarios)
 - [7. 使用汇编来处理大小为96字节或更小的数据：哈希和事件中的非索引数据](#7-use-assembly-to-perform-operations-on-data-of-size-96-bytes-or-less-hashing-and-unindexed-data-in-events)
 - [8. 在进行多个外部调用时，使用汇编来重用内存空间](#8-use-assembly-to-reuse-memory-space-when-making-more-than-one-external-call)
 - [9. 在创建多个合约时，使用汇编来重用内存空间](#9-use-assembly-to-reuse-memory-space-when-creating-more-than-one-contract)
 
 
 
-不要假设编写汇编代码会自动导致更高效的代码。我们列出了编写汇编通常效果更好的领域，但您应始终测试非汇编版本。
+不要假设编写汇编代码会自动导致更高效的代码。我们列出了编写汇编通常效果更好的领域，但你应始终测试非汇编版本。
 
 ## 1. 使用汇编来回滚并附带错误消息
 
-在Solidity代码中进行回滚时，通常使用require或revert语句来回滚执行并附带错误消息。通过使用汇编来回滚并附带错误消息，可以进一步优化。
+在 Solidity 代码中进行回滚时，通常使用 require 或 revert 语句来回滚执行并附带错误消息。通过使用汇编来回滚并附带错误消息，可以进一步优化。
 
 以下是一个示例：
+```
+/// calling restrictedAction(2) with a non-owner address: 24042
+contract SolidityRevert {
+    address owner;
+    uint256 specialNumber = 1;
 
-从上面的示例中，我们可以看到，使用汇编与使用Solidity相比，在出现相同错误消息时，使用汇编进行回滚可以节省超过300个gas。这种节省是由于Solidity编译器在内部执行的内存扩展成本和额外类型检查所导致的。
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function restrictedAction(uint256 num)  external {
+        require(owner == msg.sender, "caller is not owner");
+        specialNumber = num;
+    }
+}
+
+/// calling restrictedAction(2) with a non-owner address: 23734
+contract AssemblyRevert {
+    address owner;
+    uint256 specialNumber = 1;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function restrictedAction(uint256 num)  external {
+        assembly {
+            if sub(caller(), sload(owner.slot)) {
+                mstore(0x00, 0x20) // store offset to where length of revert message is stored
+                mstore(0x20, 0x13) // store length (19)
+                mstore(0x40, 0x63616c6c6572206973206e6f74206f776e657200000000000000000000000000) // store hex representation of message
+                revert(0x00, 0x60) // revert with data
+            }
+        }
+        specialNumber = num;
+    }
+}
+```
+从上面的示例中，我们可以看到，使用汇编与使用 Solidity 相比，在出现相同错误消息时，使用汇编进行回滚可以节省超过300个 gas。这种节省是由于 Solidity 编译器在内部执行的内存扩展成本和额外类型检查所导致的。
 
 ## 2. 通过接口调用函数会产生内存扩展成本，因此使用汇编来重用已存在于内存中的数据
 
-当从合约A调用合约B的函数时，使用接口并创建一个B的实例，并调用我们希望调用的函数是最方便的。这种方法非常有效，但由于Solidity编译我们的代码的方式，它会将要发送给合约B的数据存储在一个新的内存位置中，从而扩展内存，有时是不必要的。
+当从合约 A 调用合约 B 的函数时，使用接口并创建一个B的实例，并调用我们希望调用的函数是最方便的。这种方法非常有效，但由于 Solidity 编译我们的代码的方式，它会将要发送给合约 B 的数据存储在一个新的内存位置中，从而扩展内存，有时是不必要的。
 
-通过内联汇编，我们可以更好地优化我们的代码，并通过使用先前使用过的不再需要的内存位置或（如果calldata合约B期望的字节数小于64字节）在临时空间中存储我们的calldata来节省一些gas。
+通过内联汇编，我们可以更好地优化我们的代码，并通过使用先前使用过的不再需要的内存位置或（如果 calldata 合约 B 期望的字节数小于64字节）在临时空间中存储我们的 calldata 来节省一些 gas。
 
 下面是一个比较两者的示例：
 
@@ -68,11 +105,11 @@ contract Callme {
 }
 ```
 
-我们可以看到，在Assembly上调用set(uint256)的成本比使用Solidity少220个gas。
+我们可以看到，在 Assembly 上调用 set(uint256) 的成本比使用 Solidity 少220个 gas。
 
-请注意，当使用内联汇编进行外部调用时，重要的是使用extcodesize(addr)检查我们要调用的地址是否部署了代码，并在返回0时回滚。这很重要，因为调用一个没有部署代码的地址总是返回true，这在大多数情况下可能对我们的合约逻辑造成灾难性的影响。
+请注意，当使用内联汇编进行外部调用时，重要的是使用`extcodesize(addr)`检查我们要调用的地址是否部署了代码，并在返回0时回滚。这很重要，因为调用一个没有部署代码的地址总是返回 true，这在大多数情况下可能对我们的合约逻辑造成灾难性的影响。
 
-## 3. 常见的数学运算，如min和max，有更节省gas的替代方法
+## 3. 常见的数学运算，如 min 和 max，有更节省 gas 的替代方法
 
 **未优化**
 
@@ -82,7 +119,7 @@ function max(uint256 x, uint256 y) public pure returns (uint256 z) {
 }
 ```
 
-**优化**
+**优化后**
 
 ```
 function max(uint256 x, uint256 y) public pure returns (uint256 z) {
@@ -93,11 +130,11 @@ function max(uint256 x, uint256 y) public pure returns (uint256 z) {
 }
 ```
 
-上面的代码摘自[Solady Library](https://github.com/Vectorized/solady/blob/main/src/utils/FixedPointMathLib.sol)的数学部分，更多的数学运算可以在那里找到。值得探索该库，看看有哪些节省gas的操作可供使用。
+上面的代码摘自 [Solady Library](https://github.com/Vectorized/solady/blob/main/src/utils/FixedPointMathLib.sol) 的数学部分，更多的数学运算可以在那里找到。值得探索该库，看看有哪些节省 gas 的操作可供使用。
 
-上面的示例之所以更节省gas，是因为三元运算符（以及一般情况下带有条件的代码）在操作码中包含条件跳转，这是更昂贵的操作。
+上面的示例之所以更节省 gas，是因为三元运算符（以及一般情况下带有条件的代码）在操作码中包含条件跳转，这是更昂贵的操作。
 
-## 4. 使用SUB或XOR而不是ISZERO(EQ())来检查不等式（在某些情况下更高效）
+## 4. 使用 SUB 或 XOR 而不是 ISZERO(EQ()) 来检查不等式（在某些情况下更高效）
 
 当使用内联汇编来比较两个值的相等性（例如，如果所有者与调用者相同），有时使用以下方式更高效：
 
@@ -115,13 +152,13 @@ if eq(caller, sload(owner.slot)) {
 }
 ```
 
-XOR也可以实现相同的效果，但要注意XOR也会将所有位翻转的值视为相等，因此请确保这不会成为攻击的入口。
+XOR 也可以实现相同的效果，但要注意XOR也会将所有位翻转的值视为相等，因此请确保这不会成为攻击的入口。
 
 这个技巧取决于所使用的编译器版本和代码的上下文。
 
-## 5. 使用内联汇编来检查address(0)
+## 5. 使用内联汇编来检查 address(0)
 
-使用内联汇编编写合约通常被认为是优化了的。我们可以直接操作内存，使用更少的操作码，而不是交给Solidity编译器处理。
+使用内联汇编编写合约通常被认为是优化了的。我们可以直接操作内存，使用更少的操作码，而不是交给 Solidity 编译器处理。
 
 身份验证机制是使用内联汇编的一个例子，比如实现地址零检查。
 
@@ -154,15 +191,15 @@ contract AddressZeroCheckAssembly {
 }
 ```
 
-## 6. selfbalance比address(this).balance更便宜（在某些情况下更高效）
+## 6. selfbalance 比 address(this).balance 更便宜（在某些情况下更高效）
 
-Solidity代码中的address(this).balance有时可以使用yul中的selfbalance()函数更高效地完成，但要注意编译器有时会在幕后使用这个技巧，所以请测试两种方式。
+Solidity 代码中的address(this).balance 有时可以使用 yul 中的 selfbalance() 函数更高效地完成，但要注意编译器有时会在幕后使用这个技巧，所以请测试两种方式。
 
 ## 7. 使用汇编来处理大小为96字节或更小的数据：哈希和事件中的非索引数据
 
-Solidity总是通过扩展内存来写入，这有时不是高效的。我们可以通过使用内联汇编来优化对大小为96字节或更小的数据的内存操作。
+Solidity 总是通过扩展内存来写入，这有时不是高效的。我们可以通过使用内联汇编来优化对大小为96字节或更小的数据的内存操作。
 
-Solidity将其前64字节的内存（mem[0x00:0x40]）保留为临时空间，开发人员可以使用它来执行任何操作，并保证不会意外地被覆盖或读取。接下来的32字节的内存（mem[0x40:0x60]）是Solidity用于存储、读取和更新自由内存指针的位置。这是Solidity用于跟踪下一个内存偏移以写入新数据的方式。接下来的32字节的内存（mem[0x60:0x80]）称为零槽。它是未初始化的动态内存数据（bytes memory、string memory、T[] memory（其中T是任何有效类型））指向的位置。由于这些值是未初始化的，Solidity假设它们指向的槽（0x60）保持为0x00。
+Solidity 将其前64字节的内存（mem[0x00:0x40]）保留为临时空间，开发人员可以使用它来执行任何操作，并保证不会意外地被覆盖或读取。接下来的32字节的内存（mem[0x40:0x60]）是 Solidity 用于存储、读取和更新自由内存指针的位置。这是 Solidity 用于跟踪下一个内存偏移以写入新数据的方式。接下来的32字节的内存（mem[0x60:0x80]）称为零槽。它是未初始化的动态内存数据（bytes memory、string memory、T[] memory（其中T是任何有效类型））指向的位置。由于这些值是未初始化的，Solidity 假设它们指向的槽（0x60）保持为0x00。
 
 注意：即使动态结构体（即在自身内部具有动态值）未初始化，它们在内存中仍然不指向零槽。
 
@@ -206,9 +243,9 @@ contract CheapLogger {
 }
 ```
 
-上面的示例显示了我们如何通过使用内存来存储我们希望在BlockData事件中发出的数据来节省近2000个gas。
+上面的示例显示了我们如何通过使用内存来存储我们希望在 BlockData 事件中发出的数据来节省近2000个 gas。
 
-在这里不需要更新我们的空闲内存指针，因为执行在我们发出事件后立即结束，我们不会再返回到Solidity代码中。
+在这里不需要更新我们的空闲内存指针，因为执行在我们发出事件后立即结束，我们不会再返回到 Solidity 代码中。
 
 让我们再看一个例子，在这个例子中我们需要更新空闲内存指针
 
@@ -259,13 +296,13 @@ contract CheapHasher {
 }
 ```
 
-在上面的示例中，与第一个示例类似，我们使用汇编将值存储在内存的前96字节中，这样可以节省1000多个gas。还要注意，在这种情况下，因为我们仍然返回到Solidity代码中，我们在汇编块的开头和结尾缓存并更新了我们的空闲内存指针。这是为了确保Solidity编译器对存储在内存中的内容的假设保持兼容。
+在上面的示例中，与第一个示例类似，我们使用汇编将值存储在内存的前96字节中，这样可以节省1000多个gas。还要注意，在这种情况下，因为我们仍然返回到 Solidity 代码中，我们在汇编块的开头和结尾缓存并更新了我们的空闲内存指针。这是为了确保 Solidity 编译器对存储在内存中的内容的假设保持兼容。
 
 ## 8. 使用汇编在进行多个外部调用时重用内存空间。
 
-导致Solidity编译器扩展内存的操作之一是进行外部调用。在进行外部调用时，编译器必须将要调用的外部合约的函数签名以及其参数编码到内存中。正如我们所知，Solidity不会清除或重用内存，因此它将不得不将这些数据存储在下一个空闲内存指针中，从而进一步扩展内存。
+导致 Solidity 编译器扩展内存的操作之一是进行外部调用。在进行外部调用时，编译器必须将要调用的外部合约的函数签名以及其参数编码到内存中。正如我们所知，Solidity 不会清除或重用内存，因此它将不得不将这些数据存储在下一个空闲内存指针中，从而进一步扩展内存。
 
-使用内联汇编，我们可以使用临时空间和自由内存指针偏移来存储这些数据（如上所示），如果函数参数在内存中不超过96字节。更好的是，如果我们进行多次外部调用，我们可以重用与第一次调用相同的内存空间，将新的参数存储在内存中，而不会不必要地扩展内存。在这种情况下，Solidity将根据返回数据的长度扩展内存。这是因为返回的数据通常存储在内存中。如果返回的数据少于96字节，我们可以使用临时空间将其存储起来，以防止扩展内存。
+使用内联汇编，我们可以使用临时空间和自由内存指针偏移来存储这些数据（如上所示），如果函数参数在内存中不超过96字节。更好的是，如果我们进行多次外部调用，我们可以重用与第一次调用相同的内存空间，将新的参数存储在内存中，而不会不必要地扩展内存。在这种情况下，Solidity 将根据返回数据的长度扩展内存。这是因为返回的数据通常存储在内存中。如果返回的数据少于96字节，我们可以使用临时空间将其存储起来，以防止扩展内存。
 
 请参考下面的示例：
 
@@ -329,11 +366,11 @@ contract Assembly {
 }
 ```
 
-通过使用临时空间存储函数选择器及其参数，并在第二次调用时重用相同的内存空间，同时将返回的数据存储在零槽中，我们可以节省大约2000个gas，从而避免扩展内存。
+通过使用临时空间存储函数选择器及其参数，并在第二次调用时重用相同的内存空间，同时将返回的数据存储在零槽中，我们可以节省大约2000个 gas，从而避免扩展内存。
 
-如果您希望调用的外部函数的参数超过64字节，并且只进行一次外部调用，则使用汇编语言编写不会节省任何显著的gas。然而，如果进行多次调用，您仍然可以通过使用内联汇编将相同的内存槽用于两次调用来节省gas。
+如果你希望调用的外部函数的参数超过64字节，并且只进行一次外部调用，则使用汇编语言编写不会节省任何显著的 gas。然而，如果进行多次调用，你仍然可以通过使用内联汇编将相同的内存槽用于两次调用来节省 gas。
 
-注意：始终记得更新自由内存指针，如果它指向的偏移已经被使用，以避免Solidity覆盖存储在那里的数据或以意外的方式使用存储在那里的值。
+注意：始终记得更新自由内存指针，如果它指向的偏移已经被使用，以避免 Solidity 覆盖存储在那里的数据或以意外的方式使用存储在那里的值。
 
 还要注意，如果在调用堆栈中存在未定义的动态内存值，请避免覆盖零槽（0x60内存偏移）。一个替代方法是显式定义动态内存值，或者在退出汇编块之前将槽设置回0x00。
 
@@ -341,9 +378,9 @@ contract Assembly {
 
 ## 9. 使用汇编在创建多个合约时重用内存空间。
 
-Solidity将合约创建视为返回32字节的外部调用（即返回创建的合约地址，如果合约创建失败，则返回address(0)）。
+Solidity 将合约创建视为返回32字节的外部调用（即返回创建的合约地址，如果合约创建失败，则返回address(0)）。
 
-从关于通过外部调用节省gas的部分，我们可以立即看到一种优化的方法是将返回的地址存储在临时空间中，避免扩展内存。
+从关于通过外部调用节省 gas 的部分，我们可以立即看到一种优化的方法是将返回的地址存储在临时空间中，避免扩展内存。
 
 看下面一个类似的例子：
 
@@ -388,6 +425,6 @@ contract Called {
 }
 ```
 
-通过使用内联汇编，我们节省了近1000个gas。
+通过使用内联汇编，我们节省了近1000个 gas。
 
-注意：在两个要部署的合约不相同的情况下，第二个合约的创建代码需要使用内联汇编手动存储，而不是在Solidity中分配给一个变量，以避免内存扩展。
+注意：在两个要部署的合约不相同的情况下，第二个合约的创建代码需要使用内联汇编手动存储，而不是在 Solidity 中分配给一个变量，以避免内存扩展。

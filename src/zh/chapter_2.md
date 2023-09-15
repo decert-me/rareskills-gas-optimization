@@ -1,6 +1,6 @@
-# 节省部署时的燃料
+# 节省部署时的 Gas
 
-- [1. 使用账户nonce来预测相互依赖的智能合约的地址，从而避免使用存储变量和地址设置函数](#1-use-the-account-nonce-to-predict-the-addresses-of-interdependent-smart-contracts-thereby-avoiding-storage-variables-and-address-setter-functions)
+- [1. 使用账户 nonce 来预测相互依赖的智能合约的地址，从而避免使用存储变量和地址设置函数](#1-use-the-account-nonce-to-predict-the-addresses-of-interdependent-smart-contracts-thereby-avoiding-storage-variables-and-address-setter-functions)
 - [2. 将构造函数设为可支付](#2-make-constructors-payable)
 - [3. 通过优化IPFS哈希以获得更多的零（或使用--no-cbor-metadata编译器选项）来减小部署大小](#3-deployment-size-can-be-reduced-by-optimizing-the-ipfs-hash-to-have-more-zeros-or-using-the---no-cbor-metadata-compiler-option)
 - [4. 如果合约只使用一次，可以在构造函数中使用selfdestruct](#4-use-selfdestruct-in-the-constructor-if-the-contract-is-one-time-use)
@@ -11,11 +11,11 @@
 - [9. 使用现有的create2工厂而不是部署自己的工厂](#9-use-existing-create2-factories-instead-of-deploying-your-own)
 
 
-## 1. 使用账户nonce来预测相互依赖的智能合约的地址，从而避免使用存储变量和地址设置函数
+## 1. 使用账户 nonce 来预测相互依赖的智能合约的地址，从而避免使用存储变量和地址设置函数
 
-在传统的合约部署中（[create](https://hackmd.io/eQJUW4PLQN-6HRrgyxdhsQ?view)），智能合约的地址可以根据部署者的地址和他们的nonce进行确定性计算。
+在传统的合约部署中（[create](https://hackmd.io/eQJUW4PLQN-6HRrgyxdhsQ?view)），智能合约的地址可以根据部署者的地址和他们的 nonce 进行确定性计算。
 
-[Solady的LibRLP库](https://github.com/Vectorized/solady/blob/6c54795ef69838e233020e9ab29f3f6288efdf06/src/utils/LibRLP.sol#L27)可以帮助我们做到这一点。
+[Solady 的 LibRLP 库](https://github.com/Vectorized/solady/blob/6c54795ef69838e233020e9ab29f3f6288efdf06/src/utils/LibRLP.sol#L27)可以帮助我们做到这一点。
 
 以下是对应的中文翻译：
 
@@ -105,9 +105,9 @@ contract BurnerDeployer {
 
 在这里，调用 Writer.setX() 的成本为 47k gas。通过在部署 StorageContract 之前预先计算其部署地址，并在部署 Writer 时使用该地址，我们节省了 2k+ 的 gas，因此不需要使用设置器函数。
 
-不需要使用单独的合约来使用这种技术，您可以在部署脚本中完成。
+不需要使用单独的合约来使用这种技术，你可以在部署脚本中完成。
 
-如果您希望进一步了解，我们提供了由 [Philogy](https://twitter.com/real_philogy) 制作的 [地址预测视频教程](https://www.youtube.com/watch?v=eb3qtUc4UE4)。
+如果你希望进一步了解，我们提供了由 [Philogy](https://twitter.com/real_philogy) 制作的 [地址预测视频教程](https://www.youtube.com/watch?v=eb3qtUc4UE4)。
 
 ## 2. 将构造函数设为可支付
 
@@ -124,30 +124,30 @@ contract B {
 
 将构造函数设为可支付在部署时节省了 200 gas。这是因为非可支付函数会在其中插入一个隐式的 require(msg.value == 0)。此外，部署时的字节码较少意味着 calldata 更小，从而减少了 gas 成本。
 
-将常规函数设为非可支付有很好的理由，但通常合约是由特权地址部署的，您可以合理地假设它不会发送以太币。如果是经验不丰富的用户部署合约，则可能不适用。
+将常规函数设为非可支付有很好的理由，但通常合约是由特权地址部署的，你可以合理地假设它不会发送以太币。如果是经验不丰富的用户部署合约，则可能不适用。
 
-## 3. 通过优化IPFS哈希以获得更多的零（或使用--no-cbor-metadata编译器选项），可以减小部署大小
+## 3. 通过优化 IPFS 哈希以获得更多的零（或使用--no-cbor-metadata编译器选项），可以减小部署大小
 
-我们已经在我们的[智能合约元数据教程](https://www.rareskills.io/post/solidity-metadata)中解释过这一点，但是为了回顾一下，Solidity编译器会将51个字节的元数据附加到实际的智能合约代码中。由于每个部署字节的成本为200 gas，删除它们可以减少超过10,000 gas的部署成本。
+我们已经在我们的[智能合约元数据教程](https://www.rareskills.io/post/solidity-metadata)中解释过这一点，但是为了回顾一下，Solidity 编译器会将51个字节的元数据附加到实际的智能合约代码中。由于每个部署字节的成本为200 gas，删除它们可以减少超过10,000 gas的部署成本。
 
 然而，这并不总是理想的，因为它可能会影响智能合约的验证。相反，开发人员可以寻找使附加的IPFS哈希中具有更多零的代码注释。
 
-## 4. 如果合约只用于一次性使用，则在构造函数中使用selfdestruct
+## 4. 如果合约只用于一次性使用，则在构造函数中使用 selfdestruct
 
 有时，合约用于在一个事务中部署多个合约，这就需要在构造函数中执行。
 
-如果合约的唯一用途是构造函数中的代码，则在操作结束时进行selfdestruct将节省gas。
+如果合约的唯一用途是构造函数中的代码，则在操作结束时进行 selfdestruct 将节省 gas。
 
-尽管selfdestruct在即将到来的硬分叉中将被删除，但它仍将在构造函数中得到支持，根据[EIP 6780](https://eips.ethereum.org/EIPS/eip-6780)。
+尽管 selfdestruct 在即将到来的硬分叉中将被删除，但根据 [EIP 6780](https://eips.ethereum.org/EIPS/eip-6780)，它仍将在构造函数中得到支持。
 
 ## 5. 在选择内部函数和修饰器之间时要理解权衡
 
 修饰器在使用它的地方注入其实现字节码，而内部函数则跳转到运行时代码中其实现的位置。这给两种选项带来了一些权衡。
 
-- 多次使用修饰器意味着重复性和运行时代码大小的增加，但由于不需要跳转到内部函数执行偏移量并跳回继续执行，这减少了gas成本。这意味着如果运行时gas成本对您最重要，那么修饰器应该是您的选择，但如果部署gas成本和/或减小创建代码的大小对您最重要，那么使用内部函数将是最佳选择。
+- 多次使用修饰器意味着重复性和运行时代码大小的增加，但由于不需要跳转到内部函数执行偏移量并跳回继续执行，这减少了 gas 成本。这意味着如果运行时 gas 成本对你最重要，那么修饰器应该是你的选择，但如果部署 gas 成本和/或减小创建代码的大小对你最重要，那么使用内部函数将是最佳选择。
 - 然而，修饰器的权衡是它只能在函数的开头或结尾执行。这意味着在函数的中间执行它是不直接可能的，至少不是没有内部函数的情况下，而内部函数则破坏了原始目的。这影响了它的灵活性。然而，内部函数可以在函数的任何位置调用。
 
-示例展示了使用修饰器和内部函数的燃气成本差异
+示例展示了使用修饰器和内部函数的 gas 成本差异
 
 ```
 // SPDX-License-Identifier: MIT
@@ -227,30 +227,30 @@ pragma solidity 0.8.19;
 | 修饰器             | 195435     | 28367             | 28377             | 28411                 |
 | 内部函数           | 159309     | 28391             | 28401             | 28435                 |
 
-从上表可以看出，使用修饰器的合约在部署时比使用内部函数的合约多花费了超过35k的燃气，这是因为在3个函数中重复使用了onlyOwner功能。
+从上表可以看出，使用修饰器的合约在部署时比使用内部函数的合约多花费了超过35k的 Gas ，这是因为在3个函数中重复使用了onlyOwner功能。
 
-在运行时，我们可以看到每个使用修饰器的函数比使用内部函数的函数少消耗了固定的24燃气。
+在运行时，我们可以看到每个使用修饰器的函数比使用内部函数的函数少消耗了固定的24 Gas 。
 
 ## 6. 在部署不经常调用的非常相似的智能合约时，使用克隆或元代理
 
-当部署多个相似的智能合约时，燃气成本可能很高。为了降低这些成本，可以使用最小化的克隆或元代理，它们在其字节码中存储了实现合约的地址，并以代理的方式与其交互。
+当部署多个相似的智能合约时， Gas 成本可能很高。为了降低这些成本，可以使用最小化的克隆或元代理，它们在其字节码中存储了实现合约的地址，并以代理的方式与其交互。
 
-然而，克隆的运行时成本和部署成本之间存在权衡。由于克隆使用了delegatecall，与普通合约相比，与其交互的成本更高，因此只有在不需要频繁与其交互时才应使用克隆。例如，Gnosis Safe合约使用克隆来降低部署成本。
+然而，克隆的运行时成本和部署成本之间存在权衡。由于克隆使用了delegatecall，与普通合约相比，与其交互的成本更高，因此只有在不需要频繁与其交互时才应使用克隆。例如，Gnosis Safe 合约使用克隆来降低部署成本。
 
-从我们的博客文章中了解更多关于如何使用克隆和元代理来降低部署智能合约的燃气成本：
+从我们的博客文章中了解更多关于如何使用克隆和元代理来降低部署智能合约的 Gas 成本：
 
 - EIP-1167: 最小代理标准
 - EIP-3448 元代理克隆
 
 ## 7. 管理员函数可以接受支付
 
-我们可以将管理员特定函数设置为可接受支付，以节省燃气，因为编译器不会检查函数的调用值。
+我们可以将管理员特定函数设置为可接受支付，以节省 Gas ，因为编译器不会检查函数的调用值。
 
 这也会使合约更小，部署成本更低，因为创建和运行时代码中的操作码更少。
 
-## 8. 自定义错误通常比require语句更小
+## 8. 自定义错误（通常）比 require语句更小
 
-由于自定义错误的处理方式，它们比使用字符串的require语句更便宜。Solidity只存储错误签名的前4个字节，并且只返回这4个字节。这意味着在回滚时，只需要在内存中存储4个字节。而对于require语句中的字符串消息，Solidity必须至少存储（在内存中）并回滚64个字节。
+由于自定义错误的处理方式，它们比使用字符串的 require 语句更便宜。Solidity 只存储错误签名的前4个字节，并且只返回这4个字节。这意味着在回滚时，只需要在内存中存储4个字节。而对于 require 语句中的字符串消息，Solidity 必须至少存储（在内存中）并回滚64个字节。
 
 下面是一个示例。
 
@@ -274,6 +274,6 @@ contract NoCustomError {
 }
 ```
 
-## 9. 使用现有的create2工厂而不是部署自己的工厂
+## 9. 使用现有的 create2 工厂而不是部署自己的工厂
 
-标题已经很明确了。如果您需要确定性地址，通常可以重复使用预先部署的地址。
+标题已经很明确了。如果你需要确定性地址，通常可以重复使用预先部署的地址。

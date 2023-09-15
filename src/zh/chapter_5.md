@@ -8,7 +8,7 @@
 
 以太坊对于 calldata 的零字节收取 4 gas，对于非零字节收取 16 gas。这在正常的函数调用和部署过程中都是成立的。因此，Solidity 优化器会尽可能使用零值。
 
-## 1. 安全使用虚荣地址
+## 1. （安全地）使用虚荣地址
 
 使用具有前导零的虚荣地址更加便宜，这样可以节省 calldata 的 gas 成本。
 
@@ -24,7 +24,7 @@
 
 由于 [Solidity 使用二进制补码](https://www.rareskills.io/post/signed-int-solidity)来表示有符号整数，小的负数在 calldata 中将大部分为非零。例如，-1 在二进制补码形式下为 0xff..ff，因此更昂贵。
 
-## 3. Calldata 通常比内存更便宜
+## 3. Calldata （通常）比内存更便宜
 
 直接从 calldata 中加载函数输入或数据比从内存中加载更便宜。这是因为从 calldata 访问数据涉及的操作和 gas 成本较少。因此，建议仅在函数需要修改数据时使用内存（calldata 无法修改）。
 
