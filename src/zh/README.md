@@ -1,4 +1,4 @@
-# RareSkills gas 优化手册
+# 概述
 
 RareSkills Gas优化手册由 [RareSkills](https://www.rareskills.io/) 编写，[DeCertMe](https://decert.me) 翻译为中文版。
 
