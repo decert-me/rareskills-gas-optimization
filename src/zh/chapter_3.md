@@ -1,11 +1,11 @@
 # 跨合约调用
 
-- [1. 使用转账钩子来处理代币，而不是从目标智能合约发起转账](#1-use-transfer-hooks-for-tokens-instead-of-initiating-a-transfer-from-the-destination-smart-contract)
-- [2. 在转移以太币时，使用fallback或receive而不是deposit()](#2-use-fallback-or-receive-instead-of-deposit-when-transferring-ether)
-- [3. 在进行跨合约调用时，使用ERC2930访问列表事务来预热存储槽和合约地址](#3-use-erc2930-access-list-transactions-when-making-cross-contract-calls-to-pre-warm-storage-slots-and-contract-addresses)
-- [4. 在有意义的情况下缓存对外部合约的调用（例如缓存来自Chainlink Oracle的返回数据）](#4-cache-calls-to-external-contracts-where-it-makes-sense-like-caching-return-data-from-chainlink-oracle)
-- [5. 在类似路由器的合约中实现multicall](#5-implement-multicall-in-router-like-contracts)
-- [6. 通过构建单体架构来避免合约调用](#6-avoid-contract-calls-by-making-the-architecture-monolithic)
+- [1. 使用转账钩子来处理代币，而不是从目标智能合约发起转账](#1-使用转账钩子来处理代币而不是从目标智能合约发起转账)
+- [2. 在转移以太币时，使用fallback或receive而不是deposit()](#2-在转移以太币时使用-fallback-或-receive-代替-deposit)
+- [3. 在进行跨合约调用时，使用ERC2930访问列表事务来预热存储槽和合约地址](#3-在进行跨合约调用以预热存储槽和合约地址时使用-erc2930-访问列表交易)
+- [4. 在有意义的情况下缓存对外部合约的调用（例如缓存来自Chainlink Oracle的返回数据）](#4-在有意义的情况下缓存对外部合约的调用例如缓存来自-chainlink-oracle-的返回数据)
+- [5. 在类似路由器的合约中实现multicall](#5-在类似路由器的合约中实现-multicall)
+- [6. 通过构建单体架构来避免合约调用](#6-通过使架构成为单体结构来避免合约调用)
 
 
 ## 1. 使用转账钩子来处理代币，而不是从目标智能合约发起转账

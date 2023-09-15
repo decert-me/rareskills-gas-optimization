@@ -1,15 +1,15 @@
 # 设计模式
 
-- [1. 使用 multidelegatecall 批量处理交易](#1-use-multidelegatecall-to-batch-transactions)
-- [2. 使用 ECDSA 签名替代默克尔树进行 allowlist 和 airdrop](#2-use-ecdsa-signatures-instead-of-merkle-trees-for-allowlists-and-airdrops)
-- [3. 使用 ERC20Permit 在一笔交易中批量处理批准和转账步骤](#3-use-erc20permit-to-batch-the-approval-and-transfer-step-in-on-transaction)
-- [4. 对于游戏或其它高吞吐量、低交易价值的应用，使用L2消息传递](#4-use-l2-message-passing-for-games-or-other-high-throughput-low-transaction-value-applications)
-- [5. 如适用，使用状态通道](#5-use-state-channels-if-applicable)
-- [6. 使用投票委托作为节省 gas 的措施](#6-use-voting-delegation-as-a-gas-saving-measure)
-- [7. ERC1155 是比 ERC721 更便宜的非同质化代币](#7-erc1155-is-a-cheaper-non-fungible-token-than-erc721)
-- [8. 使用一个 ERC1155 或 ERC6909 代币代替多个 ERC20 代币](#8-use-one-erc1155-or-erc6909-token-instead-of-several-erc20-tokens)
-- [9. UUPS 升级模式对用户来说比透明升级代理更节省gas](#9-the-uups-upgrade-pattern-is-more-gas-efficient-for-users-than-the-transparent-upgradeable-proxy)
-- [10. 考虑使用 OpenZeppelin 的替代方案](#10-consider-using-alternatives-to-openzeppelin)
+- [1. 使用 multidelegatecall 批量处理交易](#1-使用-multidelegatecall-批量处理交易)
+- [2. 使用 ECDSA 签名替代默克尔树进行 allowlist 和 airdrop](#2-使用-ecdsa-签名替代默克尔树进行-allowlist-和-airdrop)
+- [3. 使用 ERC20Permit 在一笔交易中批量处理批准和转账步骤](#3-使用-erc20permit-在一笔交易中批准和转账步骤)
+- [4. 对于游戏或其它高吞吐量、低交易价值的应用，使用L2消息传递](#4-对于游戏或其它高吞吐量低交易价值的应用使用-l2-消息传递)
+- [5. 如适用，使用状态通道](#5-如果适用使用状态通道)
+- [6. 使用投票委托作为节省 gas 的措施](#6-使用投票委托作为节省-gas-的措施)
+- [7. ERC1155 是比 ERC721 更便宜的非同质化代币](#7-erc1155-是比-erc721-更便宜的非同质化代币)
+- [8. 使用一个 ERC1155 或 ERC6909 代币代替多个 ERC20 代币](#8-使用一个-erc1155-或-erc6909-代币代替多个-erc20-代币)
+- [9. UUPS 升级模式对用户来说比透明升级代理更节省gas](#9-uups-升级模式对用户来说比透明升级代理更加高效)
+- [10. 考虑使用 OpenZeppelin 的替代方案](#10-考虑使用-openzeppelin-的替代方案)
 
 
 ## 1. 使用 multidelegatecall 批量处理交易

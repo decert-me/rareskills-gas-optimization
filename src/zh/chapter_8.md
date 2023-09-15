@@ -1,12 +1,12 @@
 # 危险技术
 
-- [1. 使用 gasprice() 或 msg.value 传递信息](#1-use-gasprice-or-msgvalue-to-pass-information)
-- [2. 如果测试允许，操纵环境变量，如 coinbase() 或 block.number](#2-manipulate-environment-variables-like-coinbase-or-blocknumber-if-the-tests-allow-it)
-- [3. 使用 gasleft() 在关键点进行分支决策](#3-use-gasleft-to-branch-decisions-at-key-points)
-- [4. 使用 send() 转移以太币，但不检查成功与否](#4-use-send-to-move-ether-but-dont-check-for-success)
-- [5. 使所有函数可支付](#5-make-all-functions-payable)
-- [6. 外部库跳转](#6-external-library-jumping)
-- [7. 在合约末尾添加字节码以创建高度优化的子程序](#7-append-bytecode-to-the-end-of-the-contract-to-create-a-highly-optimized-subroutine)
+- [1. 使用 gasprice() 或 msg.value 传递信息](#1-使用-gasprice-或-msgvalue-传递信息)
+- [2. 如果测试允许，操纵环境变量，如 coinbase() 或 block.number](#2-如果测试允许操纵环境变量如-coinbase-或-blocknumber)
+- [3. 使用 gasleft() 在关键点进行分支决策](#3-使用-gasleft-在关键点进行分支决策)
+- [4. 使用 send() 转移以太币，但不检查成功与否](#4-使用-send-转移以太币但不检查成功与否)
+- [5. 使所有函数可支付](#5-将所有函数设为可支付函数)
+- [6. 外部库跳转](#6-外部库跳转)
+- [7. 在合约末尾添加字节码以创建高度优化的子程序](#7-在合约末尾添加字节码以创建高度优化的子程序)
 
 如果你参加了一个 Gas 优化竞赛，那么这些不寻常的设计模式可以帮助你，但在生产环境中使用它们是极不推荐的，或者至少应该极度谨慎。
 

@@ -1,14 +1,14 @@
 # 汇编技巧
 
-- [1. 使用汇编来回滚并附带错误消息](#1-using-assembly-to-revert-with-an-error-message)
-- [2. 通过接口调用函数会产生内存扩展成本，因此使用汇编来重用已经存在于内存中的数据](#2-calling-functions-via-interface-incurs-memory-expansion-costs-so-use-assembly-to-re-use-data-already-in-memory)
-- [3. 常见的数学运算，如最小值和最大值，有更高效的替代方法](#3-common-math-operations-like-min-and-max-have-gas-efficient-alternatives)
-- [4. 使用 SUB 或 XOR 而不是 ISZERO(EQ())来检查不等式（在某些情况下更高效）](#4-use-sub-or-xor-instead-of-iszeroeq-to-check-for-inequality-more-efficient-in-certain-scenarios)
-- [5. 使用内联汇编来检查地址是否为0](#5-use-inline-assembly-to-check-for-address0)
-- [6. selfbalance比address(this).balance 更便宜（在某些情况下更高效）](#6-selfbalance-is-cheaper-than-addressthisbalance-more-efficient-in-certain-scenarios)
-- [7. 使用汇编来处理大小为96字节或更小的数据：哈希和事件中的非索引数据](#7-use-assembly-to-perform-operations-on-data-of-size-96-bytes-or-less-hashing-and-unindexed-data-in-events)
-- [8. 在进行多个外部调用时，使用汇编来重用内存空间](#8-use-assembly-to-reuse-memory-space-when-making-more-than-one-external-call)
-- [9. 在创建多个合约时，使用汇编来重用内存空间](#9-use-assembly-to-reuse-memory-space-when-creating-more-than-one-contract)
+- [1. 使用汇编来回滚并附带错误消息](#1-使用汇编来回滚并附带错误消息)
+- [2. 通过接口调用函数会产生内存扩展成本，因此使用汇编来重用已经存在于内存中的数据](#2-通过接口调用函数会产生内存扩展成本因此使用汇编来重用已存在于内存中的数据)
+- [3. 常见的数学运算，如最小值和最大值，有更高效的替代方法](#3-常见的数学运算如-min-和-max有更节省-gas-的替代方法)
+- [4. 使用 SUB 或 XOR 而不是 ISZERO(EQ())来检查不等式（在某些情况下更高效）](#4-使用-sub-或-xor-而不是-iszeroeq-来检查不等式在某些情况下更高效)
+- [5. 使用内联汇编来检查地址是否为0](#5-使用内联汇编来检查-address0)
+- [6. selfbalance比address(this).balance 更便宜（在某些情况下更高效）](#6-selfbalance-比-addressthisbalance-更便宜在某些情况下更高效)
+- [7. 使用汇编来处理大小为96字节或更小的数据：哈希和事件中的非索引数据](#7-使用汇编来处理大小为96字节或更小的数据哈希和事件中的非索引数据)
+- [8. 在进行多个外部调用时，使用汇编来重用内存空间](#8-使用汇编在进行多个外部调用时重用内存空间)
+- [9. 在创建多个合约时，使用汇编来重用内存空间](#9-使用汇编在创建多个合约时重用内存空间)
 
 
 
