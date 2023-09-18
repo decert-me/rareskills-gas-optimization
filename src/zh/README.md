@@ -1,6 +1,6 @@
 # 概述
 
-Gas 优化手册由 [RareSkills](https://www.rareskills.io/) 编写，[DeCertMe](https://decert.me) 翻译为中文版。
+Gas 优化手册由 [RareSkills](https://www.rareskills.io/) 编写，[DeCert.me](https://decert.me) 翻译为中文版。
 
 ## Solidity gas 优化
 
