@@ -14,8 +14,8 @@
 - [12. 除非有必要，否则不要将变量设为 public](#12-除非必要不要将变量设为公开)
 - [13. 优化器的值应尽量设置得很大](#13-优化器应选择非常大的值)
 - [14. 频繁使用的函数应具有最佳名称](#14-频繁使用的函数应具有最佳名称)
-- [15. 位移比乘法或除法更便宜，特别是 2 的幂次方](#15-位移比乘法或除法更省gas)
-- [16. 有时缓存 calldata 更便宜](#16-有时缓存calldata更便宜)
+- [15. 位移比乘法或除法更便宜，特别是 2 的幂次方](#15-位移比乘法或除法更省-gas)
+- [16. 有时缓存 calldata 更便宜](#16-有时缓存-calldata-更便宜)
 - [17. 使用无分支算法替代条件语句和循环](#17-使用无分支算法替代条件语句和循环)
 - [18. 只使用一次的内部函数可以内联以节省 gas ](#18-只使用一次的内部函数可以内联以节省-gas)
 - [19. 如果数组或字符串长度超过 32 字节，则通过哈希比较它们的相等性](#19-如果数组或字符串的长度超过-32-字节则通过哈希比较它们的相等性)
@@ -217,7 +217,7 @@ contract Loop2 {
 
 在整数方面，最好使用 uint256，除非需要较小的整数。
 
-这是因为当使用较小的整数时，EVM会自动将其转换为 uint256。这个转换过程会增加额外的 gas 成本，因此最好从一开始就使用 uint256。
+这是因为当使用较小的整数时，EVM 会自动将其转换为 uint256。这个转换过程会增加额外的 gas 成本，因此最好从一开始就使用 uint256。
 
 ```
 // SPDX-License-Identifier: MIT
@@ -247,7 +247,7 @@ contract NoTypecasting {
 
 例如，表达式 require(msg.sender == owner || msg.sender == manager)将在第一个表达式 msg.sender == owner 评估为 true 时通过。第二个表达式 msg.sender == manager 根本不会被评估。
 
-然而，如果第一个表达式 msg.sender == owner评估为 false，则第二个表达式 msg.sender == manager 将被评估以确定整个表达式是 true 还是 false。在这里，通过首先检查最有可能通过的条件，我们可以避免检查第二个条件，从而在大多数成功的调用中节省 gas 。
+然而，如果第一个表达式 msg.sender == owner 评估为 false，则第二个表达式 msg.sender == manager 将被评估以确定整个表达式是 true 还是 false。在这里，通过首先检查最有可能通过的条件，我们可以避免检查第二个条件，从而在大多数成功的调用中节省 gas 。
 
 对于表达式 require(msg.sender == owner && msg.sender == manager) 也是类似的。如果第一个表达式 msg.sender == owner 评估为 false，则不会评估第二个表达式 msg.sender == manager，因为整个表达式不能为 true。为了使整个语句为 true，两边的表达式都必须评估为 true。在这里，通过首先检查最有可能失败的条件，我们可以避免检查第二个条件，从而在大多数调用失败时节省 gas 。
 
@@ -309,7 +309,7 @@ contract FunctionWithLeadingZeros {
 
 此外，我们还有一个有用的工具，名为 Solidity Zero Finder，它是用 Rust 构建的，可以帮助开发人员实现这一点。它可以在这个 [GitHub 存储库](https://github.com/jeffreyscholz/solidity-zero-finder-rust)中找到。
 
-## 15. 位移比乘法或除法更省gas
+## 15. 位移比乘法或除法更省 gas
 
 在 Solidity 中，通过位移操作来乘以或除以二的幂次方的数字通常比使用乘法或除法运算符更节省 gas。
 
@@ -331,9 +331,9 @@ EVM 中的位移操作码（如 shr（右移）和 shl（左移））的成本�
 
 大部分的 gas 节省也来自于 solidity 对 shr 和 shl 操作没有溢出/下溢或除法检查的事实。在使用这些操作符时要牢记这一点。
 
-## 16. 有时缓存calldata更便宜
+## 16. 有时缓存 calldata 更便宜
 
-尽管 calldataload 指令是一个廉价的操作码，但 solidity 编译器有时会输出更便宜的代码，如果你缓存calldataload。这并不总是这样，所以你应该测试两种可能性。
+尽管 calldataload 指令是一个廉价的操作码，但 solidity 编译器有时会输出更便宜的代码，如果你缓存 calldataload。这并不总是这样，所以你应该测试两种可能性。
 
 ```
 contract LoopSum {

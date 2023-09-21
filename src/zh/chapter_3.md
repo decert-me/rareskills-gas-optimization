@@ -1,10 +1,10 @@
 # 跨合约调用
 
 - [1. 使用转账钩子来处理代币，而不是从目标智能合约发起转账](#1-使用转账钩子来处理代币而不是从目标智能合约发起转账)
-- [2. 在转移以太币时，使用fallback或receive而不是deposit()](#2-在转移以太币时使用-fallback-或-receive-代替-deposit)
-- [3. 在进行跨合约调用时，使用ERC2930访问列表事务来预热存储槽和合约地址](#3-在进行跨合约调用以预热存储槽和合约地址时使用-erc2930-访问列表交易)
-- [4. 在有意义的情况下缓存对外部合约的调用（例如缓存来自Chainlink Oracle的返回数据）](#4-在有意义的情况下缓存对外部合约的调用例如缓存来自-chainlink-oracle-的返回数据)
-- [5. 在类似路由器的合约中实现multicall](#5-在类似路由器的合约中实现-multicall)
+- [2. 在转移以太币时，使用 fallback 或 receive 而不是 deposit()](#2-在转移以太币时使用-fallback-或-receive-代替-deposit)
+- [3. 在进行跨合约调用时，使用 ERC2930 访问列表事务来预热存储槽和合约地址](#3-在进行跨合约调用以预热存储槽和合约地址时使用-erc2930-访问列表交易)
+- [4. 在有意义的情况下缓存对外部合约的调用（例如缓存来自 Chainlink Oracle 的返回数据）](#4-在有意义的情况下缓存对外部合约的调用例如缓存来自-chainlink-oracle-的返回数据)
+- [5. 在类似路由器的合约中实现 multicall](#5-在类似路由器的合约中实现-multicall)
 - [6. 通过构建单体架构来避免合约调用](#6-通过使架构成为单体结构来避免合约调用)
 
 
@@ -12,14 +12,14 @@
 
 假设你有一个合约 A，它接受代币 B（一个 NFT 或一个 ERC1363代币）。简单的工作流程如下：
 
-1. msg.sender 批准合约A接受代币 B
-2. msg.sender 调用合约A将代币从 msg.sender 转移到A
-3. 合约A然后调用代币 B 进行转移
-4. 代币 B 执行转移，并在合约A中调用 onTokenReceived()
-5. 合约 A 从 onTokenReceived() 返回一个值给代币B
-6. 代币B将执行返回给合约 A
+1. msg.sender 批准合约 A 接受代币 B
+2. msg.sender 调用合约 A 将代币从 msg.sender 转移到 A
+3. 合约 A 然后调用代币 B 进行转移
+4. 代币 B 执行转移，并在合约 A 中调用 onTokenReceived()
+5. 合约 A 从 onTokenReceived() 返回一个值给代币 B
+6. 代币 B 将执行返回给合约 A
 
-这种方式非常低效。更好的方式是让 msg.sender 调用合约B进行转账，合约B再调用合约A中的 tokenReceived 钩子。
+这种方式非常低效。更好的方式是让 msg.sender 调用合约 B 进行转账，合约 B 再调用合约 A 中的 tokenReceived 钩子。
 
 请注意：
 
@@ -28,7 +28,7 @@
 - ERC1363 具有 transferAndCall
 - ERC777 具有转账钩子，但已被弃用。如果你需要可替代的代币，请使用 ERC1363 或 ERC1155
 
-如果你需要向合约A传递参数，只需使用 data 字段，并在合约 A 中解析该字段。
+如果你需要向合约 A 传递参数，只需使用 data 字段，并在合约 A 中解析该字段。
 
 ## 2. 在转移以太币时，使用 fallback 或 receive 代替 deposit()
 
