@@ -9,6 +9,7 @@
 - [7. Use assembly to perform operations on data of size 96 bytes or less: hashing and unindexed data in events](#7-use-assembly-to-perform-operations-on-data-of-size-96-bytes-or-less-hashing-and-unindexed-data-in-events)
 - [8. Use assembly to reuse memory space when making more than one external call.](#8-use-assembly-to-reuse-memory-space-when-making-more-than-one-external-call)
 - [9. Use assembly to reuse memory space when creating more than one contract.](#9-use-assembly-to-reuse-memory-space-when-creating-more-than-one-contract)
+- [10. Test if a number is even or odd by checking the last bit instead of using a modulo operator](#10-Test-if-a-number-is-even-or-odd-by-checking-the-last-bit-instead-of-using-a-modulo-operator)
 
 
 
@@ -431,5 +432,7 @@ We saved close to 1,000 gas by using inline assembly.
 
 Note: In the scenario where the two contracts to be deployed are not the same, the second contract’s creation code would need to be mstored manually using inline assembly and not assigned to a variable in solidity to avoid memory expansion.
 
+## 10. Test if a number is even or odd by checking the last bit instead of using a modulo operator
 
+The conventional way to check if a number is even or odd is to do x % 2 == 0 where x is the number in question. You can instead check if x & uint256(1) == 0. where x is assumed to be a uint256. Bitwise and is cheaper than the modulo op code. In binary, the rightmost bit represents "1" whereas all the bits to the are multiples of 2, which are even. Adding "1" to an even number causes it to be odd.
 

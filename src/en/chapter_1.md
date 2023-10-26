@@ -17,6 +17,7 @@
 - [11. Use storage pointers instead of memory where appropriate](#11-use-storage-pointers-instead-of-memory-where-appropriate)
 - [12. Avoid having ERC20 token balances go to zero, always keep a small amount](#12-avoid-having-erc20-token-balances-go-to-zero-always-keep-a-small-amount)
 - [13. Count from n to zero instead of counting from zero to n](#13-count-from-n-to-zero-instead-of-counting-from-zero-to-n)
+- [14. Timestamps and block numbers do not need to be uint256](#14-Timestamps-and-block-numbers-in-storage-do-not-need-to-be-uint256) 
 
 ## Gas optimization tricks do not always work
 
@@ -462,7 +463,7 @@ You can learn more about this technique from these resources:
 
 [Video tutorial by a student at RareSkills](https://www.youtube.com/watch?v=Iv0cPT-7AR8)
 
- [Bitmap presale tutorial](https://medium.com/donkeverse/hardcore-gas-savings-in-nft-minting-part-3-save-30-000-in-presale-gas-c945406e89f0)
+[Bitmap presale tutorial](https://medium.com/donkeverse/hardcore-gas-savings-in-nft-minting-part-3-save-30-000-in-presale-gas-c945406e89f0)
 
 ## 10. Use SSTORE2 or SSTORE3 to store a lot of data
 
@@ -611,13 +612,6 @@ If an address is frequently emptying (and reloading) it’s account balance, thi
 
 When setting a storage variable to zero, a refund is given, so the net gas spent on counting will be less if the final state of the storage variable is zero.
 
+## 14. Timestamps and block numbers in storage do not need to be uint256
 
-
-
-
-
-
-
-
-
-
+A timestamp of size uint48 will work for millions of years into the future. A block number increments once every 12 seconds. This should give you a sense of the size of numbers that are sensible.

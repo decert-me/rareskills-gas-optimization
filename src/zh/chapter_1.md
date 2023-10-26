@@ -17,6 +17,7 @@
 - [11. 在适当的情况下使用存储指针而不是内存](#11-在适当的情况下使用存储指针而不是内存)
 - [12. 避免 ERC20 代币余额变为零，始终保留一小笔金额](#12-避免-erc20-代币余额变为零始终保留一小笔金额)
 - [13. 从 n 倒数到零，而不是从零到 n 进行计数](#13-从-n-倒数到零而不是从零到-n-进行计数)
+- [14. 存储中的时间戳和区块编号不需要是 uint256](#14-存储中的时间戳和区块编号不需要是-uint256)
 
 ## gas 优化技巧并非总是有效
 
@@ -191,7 +192,7 @@ contract Unpacked_Struct {
     struct unpackedStruct {
         uint64 time; // Takes one slot - although it  only uses 64 bits (8 bytes) out of 256 bits (32 bytes).
         uint256 money; // This will take a new slot because it is a complete 256 bits (32 bytes) value and thus cannot be packed with the previous value.
-        address person; // An address occupies only 160 bits (40 bytes).
+        address person; // An address occupies only 160 bits (20 bytes).
     }
 
     // Starts at slot 0
@@ -607,3 +608,8 @@ contract StoragePointerOptimized {
 ## 13. 从 n 倒数到零，而不是从零到 n 进行计数
 
 当将存储变量设置为零时，会获得退款，因此如果存储变量的最终状态为零，则计数所花费的净 gas 将更少。
+
+## 14. 存储中的时间戳和区块编号不需要是 uint256
+
+一个大小为 uint48 的时间戳可以工作数百万年。一个区块编号每 12 秒递增一次。这应该让你对合理的数字大小有所了解。
+
