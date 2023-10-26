@@ -3,4 +3,4 @@ authors = ["0xdwong"]
 language = "zh-cn"
 multilingual = false
 src = "src/zh"
-title = "Rareskills gas 优化手册"
+title = "Gas 优化手册"
