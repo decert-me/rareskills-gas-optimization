@@ -329,7 +329,7 @@ contract FunctionWithLeadingZeros {
 
 EVM 中的位移操作码（如 shr（右移）和 shl（左移））的成本为5 gas，而乘法和除法操作（mul 和 div）的成本为每个3 gas。
 
-大部分的 gas 节省也来自于 solidity 对 shr 和 shl 操作没有溢出/下溢或除法检查的事实。在使用这些操作符时要牢记这一点。
+大部分的节省来自于 Solidity 不会对 shr 和 shl 操作进行溢出/下溢或除零检查。在使用这些运算符时，要牢记这一点，以避免发生溢出和下溢的错误。
 
 ## 16. 有时缓存 calldata 更便宜
 
