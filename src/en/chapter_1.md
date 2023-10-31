@@ -63,7 +63,7 @@ The purpose of this article is to be the most comprehensive list of tricks out t
 
 ## We do not discuss application-specific tricks
 
-There are gas-efficient was to determine if a number is prime for example, but this is so rarely needed that dedicating space to it would lower the value of this article. Similarly, in our [Tornado Cash tutorial](https://www.rareskills.io/post/how-does-tornado-cash-work), we suggest ways the codebase could be made more efficient, but including that treatment here would not benefit readers as it is too application specific.
+There are gas-efficient ways to determine if a number is prime for example, but this is so rarely needed that dedicating space to it would lower the value of this article. Similarly, in our [Tornado Cash tutorial](https://www.rareskills.io/post/how-does-tornado-cash-work), we suggest ways the codebase could be made more efficient, but including that treatment here would not benefit readers as it is too application specific.
 
 ---
 
@@ -134,7 +134,8 @@ contract GasSavingExample {
 
 **EVM Packing is slightly less efficient** 
 
-This also uses one slot like the above example, but may be slightly expensive when storing or reading values in a single transaction. This is because the EVM will do the bit-shifting itself.
+This also uses one slot like the above example, but may be slightly expensive when storing or reading values in a single transaction. 
+This is because the EVM will do the bit-shifting itself.
 
 ```
 contract GasSavingExample2 {
@@ -489,7 +490,7 @@ Example:
 
 Our goal is to store a specific data (in bytes format) as the contract’s bytecode. To achieve this,We need to do 2 things:-
 
-1. Copy our data to memory first, as EVM then takes this data from memory and store it as runtime code. For more, check this.
+1. Copy our data to memory first, as EVM then takes this data from memory and store it as runtime code. You can learn more in our article about [contract creation code.](https://www.rareskills.io/post/ethereum-contract-creation-code)
 2. Return and store the newly deployed contract address for future use.
 
 - We add the contract code size in place of the four zeroes(0000) between 61 and 80 in the below code 0x61000080600a3d393df300. Hence if code size is 65, it will become 0x61004180600a3d393df300(0x0041 = 65)

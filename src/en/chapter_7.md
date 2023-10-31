@@ -336,7 +336,7 @@ and this is also equivalent
 
 Bit shifting operations opcodes in the EVM, such as shr (shift right) and shl (shift left), cost 5 gas while multiplication and division operations (mul and div) cost 3 gas each.
 
-Majority of gas savings also comes the fact that solidity does no overflow/underflow or division by check for shr and shl operations. It’s important to have this in mind when using these operators.
+Majority of gas savings also comes the fact that solidity does no overflow/underflow or division by check for shr and shl operations. It’s important to have this in mind when using these operators so that overflow and underflow bugs don't happen.
 
 ## 16. It is sometimes cheaper to cache calldata
 
