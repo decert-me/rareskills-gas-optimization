@@ -1,8 +1,5 @@
 # 过时的技巧
 
-- [1. external 比 public 更便宜](#1-external-比-public-更便宜)
-- [2. != 0比> 0更便宜](#2--0比-0更便宜)
-
 ## 1. external 比 public 更便宜
 
 如果函数无法在合约内部调用，为了清晰起见，仍然应该优先选择 external 修饰符，但它对于节省 gas 没有影响。

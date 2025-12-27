@@ -8,7 +8,7 @@ Gas 优化手册由 [RareSkills](https://www.rareskills.io/) 编写，[DeCert.me
 
 这篇文章超过11,000个字，不包括源代码，是关于 gas 优化的最完整的资料。
 
-要完全理解本教程中的技巧，你需要了解 EVM 的工作原理，你可以通过参加 Rareskills 的[ gas 优化课程](https://hackmd.io/eQJUW4PLQN-6HRrgyxdhsQ?view)，[Yul 课程](https://hackmd.io/eQJUW4PLQN-6HRrgyxdhsQ?view)，以及练习 [Huff Puzzles](https://github.com/RareSkills/huff-puzzles) 来学习。
+要完全理解本教程中的技巧，你需要了解 EVM 的工作原理，你可以通过参加登链社区[线下集训营](https://learnblockchain.cn/openspace/1)
 
 然而，如果你只想知道代码中可能进行 gas 优化的部分，本文提供了很多可以参考的领域。
 
