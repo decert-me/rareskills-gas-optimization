@@ -1,4 +1,3 @@
-# 过时的技巧
 
 > **更新说明**：本章节列出了在新版本 Solidity、EVM 升级或生态系统变化后不再有效或重要性大幅降低的优化技巧。
 
@@ -67,7 +66,7 @@ contract RedeployPattern {
 - 使用状态标志停用合约
 
 **参考：**
-- [Chapter 2 第4节](./chapter_2.md#4-如果合约只用于一次性使用则在构造函数中使用-selfdestruct)
+- [Chapter 2 第4节](https://learnblockchain.cn/article/22693?course_id=95#4.%20selfdestruct%20%E4%B8%80%E6%AC%A1%E6%80%A7%E5%90%88%E7%BA%A6)
 
 **时间线：** Cancun 升级（2024年3月）后
 
@@ -126,7 +125,7 @@ contract CalldataOptimization {
 - L1↔L2 跨链消息（仍使用 calldata）
 - 极大数据量的操作
 
-**参考：** [Chapter 5](./chapter_5.md) 完整分析
+**参考：** [Chapter 5](https://learnblockchain.cn/article/22696) 完整分析
 
 **时间线：** Cancun 升级（2024年3月）后
 
@@ -179,7 +178,7 @@ uint256 z = y / 4;   // 可能优化为 y >> 2
 - ✅ 使用最新的稳定版本（0.8.24+）
 - ⚠️ 不要盲目信任编译器，始终基准测试
 
-**时间线：** Solidity 0.8.20+ 逐步改进
+**时间线：** [Solidity](https://learnblockchain.cn/course/93) 0.8.20+ 逐步改进
 
 ---
 
@@ -239,7 +238,7 @@ contract NewApproach {
 
 - ✅ 需要永久保存的大量数据（> 24 KB）
 - ✅ 需要跨交易访问的数据
-- ✅ 链上 NFT 元数据存储
+- ✅ 链上 [NFT](https://learnblockchain.cn/tags/NFT) 元数据存储
 
 ### 何时使用临时存储
 
@@ -249,8 +248,8 @@ contract NewApproach {
 - ✅ 批量操作的中间数据
 
 **参考：**
-- [Chapter 1 第6.5节](./chapter_1.md#65-使用临时存储transient-storage节省高达-99-的-gas)
-- [Chapter 10 第1节](./chapter_10.md#1-临时存储transient-storage---eip-1153)
+- [Gas 优化常用技巧](https://learnblockchain.cn/article/22692?course_id=95#7.%20%E4%BD%BF%E7%94%A8%E7%9E%AC%E6%97%B6%E5%AD%98%E5%82%A8)
+
 
 **时间线：** Cancun 升级（2024年3月）后
 
@@ -265,16 +264,16 @@ contract NewApproach {
 2. != 0 vs > 0
 3. 某些循环和位移优化
 
-**EVM 升级导致：**
+**[EVM](https://learnblockchain.cn/tags/EVM?map=EVM) 升级导致：**
 4. 跨交易 SELFDESTRUCT（Cancun - EIP-6780）
 5. L2 calldata 零字节优化（Cancun - EIP-4844）
 6. SSTORE2 用于临时数据（Cancun - EIP-1153）
 
 ### 建议
 
-1. **保持更新**：使用 Solidity 0.8.24+ 和 Cancun EVM
+1. **保持更新**：使用 [Solidity](https://learnblockchain.cn/course/93) 0.8.24+ 和 Cancun [EVM](https://learnblockchain.cn/tags/EVM?map=EVM)
 2. **重新评估**：定期审查优化策略是否仍然有效
 3. **基准测试**：始终测试验证优化效果
-4. **关注升级**：跟踪以太坊升级和编译器更新
+4. **关注升级**：跟踪[以太坊](https://learnblockchain.cn/tags/以太坊?map=EVM)升级和编译器更新
 5. **使用现代工具**：Solady、临时存储、Blob 交易等
 

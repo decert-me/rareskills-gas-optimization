@@ -1,1 +1,5 @@
 book
+.env
+.claude
+myenv
+scripts/

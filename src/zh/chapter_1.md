@@ -1,6 +1,7 @@
-# Gas 优化常用技巧
 
-## 1. 最重要的：尽可能避免从零到一的存储写入
+## 1. 尽可能避免从1到1写入
+
+最重要的：尽可能避免从零到一的存储写入
 
 初始化存储变量是合约可以执行的最昂贵的操作之一。
 
@@ -8,9 +9,11 @@
 
 这就是为什么 Openzeppelin 的重入保护使用1和2来注册函数的活动状态，而不是0和1。将存储变量从非零更改为非零只需花费5,000 gas。
 
-## 2. 缓存存储变量：仅写入和读取存储变量一次
+## 2. 缓存存储变量
 
-如果你已经阅读过[以太坊智能合约存储与 Gas 优化](https://learnblockchain.cn/article/22620), 你应该了解不同的存储位置的 Gas 成本是不一样的。
+缓存存储变量：仅写入和读取存储变量一次
+
+如果你已经阅读过[以太坊智能合约存储与 Gas 优化](https://learnblockchain.cn/article/22620), 你应该了解不同的存储位置的 [Gas](https://learnblockchain.cn/tags/Gas?map=EVM) 成本是不一样的。
 
 在高效的 Solidity 代码中，你经常会看到以下模式。从存储变量读取至少需要100 gas，因为 Solidity 不会缓存存储读取。写入要昂贵得多。因此，你应该手动缓存变量，以便仅进行一次存储读取和一次存储写入。
 
@@ -161,7 +164,7 @@ contract Packed_Struct {
 }
 ```
 
-### 5. 保持字符串长度小于32字节
+## 5. 保持字符串长度小于32字节
 
 在 Solidity 中，字符串是可变长度的动态数据类型，意味着它们的长度可以根据需要进行更改和增长。
 
@@ -313,7 +316,7 @@ contract EfficientString {
 
 上面的代码可以进一步优化，但保持这种方式使其更容易理解。
 
-## 5. 从不更新的变量应为不可变的或常量
+## 6. 使用不可变的或常量
 
 在 Solidity 中，不打算更新的变量应该是常量或不可变的。
 
@@ -325,13 +328,18 @@ pragma solidity ^0.8.24;
 
 contract Constants {
     uint256 constant MAX_UINT256 = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+    uint immutable maxBalance;
+
+    constructor(uint max) {
+        maxBalance = max;
+    }
 
     function get_max_value() external pure returns (uint256) {
         return MAX_UINT256;
     }
 }
 
-// This uses more gas than the above contract
+//  更多 gas
 contract NoConstants {
     uint256 MAX_UINT256 = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
 
@@ -343,7 +351,7 @@ contract NoConstants {
 
 这样可以节省大量的 gas，因为我们不进行任何昂贵的存储读取操作。
 
-## 6. 使用瞬时存储（Transient Storage）
+## 7. 使用瞬时存储
 
 瞬时存储（Transient Storage）是 2024年3月 Cancun 升级引入的新型存储方式。它使用两个新操作码：
 - `TSTORE`：写入瞬时数据（100 gas）
@@ -352,7 +360,7 @@ contract NoConstants {
 **关键特性：**
 - 数据仅在单个交易期间存在
 - 交易结束后自动清零
-- Gas 成本仅 100 gas（相比 SSTORE 的 22,100 gas，节省 **99.5%**）
+- [Gas](https://learnblockchain.cn/tags/Gas?map=EVM) 成本仅 100 gas（相比 SSTORE 的 22,100 gas，节省 **99.5%**）
 
 
 瞬时存储特别适合需要在**单个交易内**共享状态的场景：
@@ -412,9 +420,9 @@ contract TransientReentrancyGuard {
 
 更多瞬时存储的详细内容和高级用法，请参考 [瞬时存储](https://learnblockchain.cn/article/22611)。
 
-## 7. 使用映射而不是数组以避免长度检查
+## 8. 使用映射而不是数组
 
-当存储你希望按特定顺序组织并使用固定键/索引检索的项目列表或组时，通常使用数组数据结构是常见的做法。这种方法很有效，但你知道可以实现一个技巧，每次读取时可以节省2000多个 gas 吗？
+使用映射而不是数组以避免长度检查,当存储你希望按特定顺序组织并使用固定键/索引检索的项目列表或组时，通常使用数组数据结构是常见的做法。这种方法很有效，但你知道可以实现一个技巧，每次读取时可以节省2000多个 gas 吗？
 
 请参考下面的示例
 
@@ -454,12 +462,15 @@ contract Mapping {
 
 由于映射的方式是（简单的键=>值对），不需要进行这样的检查，我们可以直接从存储槽中读取。重要的是要注意，当以这种方式使用映射时，你的代码应确保不要读取超出规范数组索引的位置。
 
-## 8. 使用 unsafeAccess 在数组上避免冗余的长度检查
+## 9. 在数组上使用 unsafeAccess 
 
-使用映射来避免 Solidity 在读取数组时进行的长度检查（同时仍然使用数组）的另一种方法是使用 Openzeppelin 的 [Arrays.sol](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Arrays.sol) 库中的 unsafeAccess 函数。这使开发人员可以直接访问数组中任意给定索引的值，同时跳过长度溢出检查。但是，仅在确保传递给函数的索引不会超过传递的数组的长度时才使用此方法。
+使用 unsafeAccess 在数组上避免冗余的长度检查.
 
-## 9. 在使用大量布尔值时，使用位图而不是布尔值
+使用映射来避免 [Solidity](https://learnblockchain.cn/course/93) 在读取数组时进行的长度检查（同时仍然使用数组）的另一种方法是使用 Openzeppelin 的 [Arrays.sol](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Arrays.sol) 库中的 unsafeAccess 函数。这使开发人员可以直接访问数组中任意给定索引的值，同时跳过长度溢出检查。但是，仅在确保传递给函数的索引不会超过传递的数组的长度时才使用此方法。
 
+## 10. 使用布尔位图
+
+在使用大量布尔值时，使用位图而不是布尔值。
 一个常见的模式，特别是在空投中，是在领取空投或 NFT 时将地址标记为“已使用”。
 
 然而，由于只需要一个位来存储这些信息，而每个存储槽是 256 位，这意味着可以使用一个存储槽存储 256 个标志/布尔值。
@@ -470,11 +481,13 @@ contract Mapping {
 
 [位图预售教程](https://medium.com/donkeverse/hardcore-gas-savings-in-nft-minting-part-3-save-30-000-in-presale-gas-c945406e89f0)
 
-## 10. 使用 SSTORE2 或 SSTORE3 存储大量数据
+## 11. 使用 SSTORE2、SSTORE3 
+
+当存储大量数据使用 SSTORE2 或 SSTORE3 
 
 ### SSTORE
 
-SSTORE 是一种 EVM 操作码，允许我们按键值方式存储持久数据。与 EVM 中的所有内容一样，键和值都是 32 字节的值。
+SSTORE 是一种 EVM 操作码，允许我们按键值方式存储持久数据。与 [EVM](https://learnblockchain.cn/tags/EVM?map=EVM) 中的所有内容一样，键和值都是 32 字节的值。
 
 写入（SSTORE）和读取（SLOAD）的成本在 gas 消耗方面非常昂贵。写入 32 字节的成本为 22,100 gas ，相当于每字节约 690 gas 。另一方面，写入智能合约的字节码的成本为每字节 200 gas 。
 
@@ -493,7 +506,7 @@ SSTORE2 的一些特性：
 
 我们的目标是将特定的数据（以字节格式）存储为合约的字节码。为了实现这一目标，我们需要做两件事：
 
-1. 首先将我们的数据复制到内存中，然后 EVM 会从内存中获取这些数据并将其存储为运行时代码。你可以在我们的文章[合约创建代码](https://www.rareskills.io/post/ethereum-contract-creation-code)中了解更多信息。
+1. 首先将我们的数据复制到内存中，然后 [EVM](https://learnblockchain.cn/tags/EVM?map=EVM) 会从内存中获取这些数据并将其存储为运行时代码。你可以在我们的文章[合约创建代码](https://www.rareskills.io/post/ethereum-contract-creation-code)中了解更多信息。
 2. 返回并存储新部署的合约地址以供将来使用。
 
 - 我们在下面的代码 0x61000080600a3d393df300 中的四个零（0000）之间添加合约代码大小。因此，如果代码大小为 65，则变为 0x61004180600a3d393df300（0x0041 = 65）。
@@ -540,9 +553,11 @@ SSTORE3 实现了这样一个设计，即新部署的地址与我们提供的数
 
 感谢 [Philogy](https://twitter.com/real_philogy/status/1677811731962245120) 提供的 SSTORE3。
 
-## 11. 在适当的情况下使用存储指针而不是内存
+## 12. 存储指针而不是内存
 
-在 Solidity 中，存储指针是引用合约存储位置的变量。它们与 C/C++ 等语言中的指针并不完全相同。
+在适当的情况下使用存储指针而不是内存
+
+在 [Solidity](https://learnblockchain.cn/course/93) 中，存储指针是引用合约存储位置的变量。它们与 C/C++ 等语言中的指针并不完全相同。
 
 了解如何高效地使用存储指针可以帮助我们避免不必要的存储读取，并执行高效的存储更新。
 
@@ -604,17 +619,19 @@ contract StoragePointerOptimized {
 
 注意：在使用存储指针时，务必小心不要引用[悬空指针](https://docs.soliditylang.org/en/v0.8.21/types.html#dangling-references-to-storage-array-elements)。（这是 RareSkills 的一位讲师制作的关于悬空指针的[视频教程](https://www.youtube.com/watch?v=Zi4BANKFNP8)）。
 
-## 12. 避免 ERC20 代币余额变为零，始终保留一小笔金额
+## 13. 避免 ERC20 余额变为零
 
-这与上面的避免零写入部分有关，但值得单独提出来，因为实现方式有点微妙。
+避免 ERC20 代币余额变为零，始终保留一小笔金额，这与上面的避免零写入部分有关，但值得单独提出来，因为实现方式有点微妙。
 
 如果一个地址频繁地清空（和重新加载）其账户余额，这将导致大量的零到一的写入操作。
 
-## 13. 从 n 倒数到零，而不是从零到 n 进行计数
+## 14. 倒数计数
 
+从 n 倒数到零，而不是从零到 n 进行计数
 当将存储变量设置为零时，会获得退款，因此如果存储变量的最终状态为零，则计数所花费的净 gas 将更少。
 
-## 14. 存储中的时间戳和区块编号不需要是 uint256
+## 15. 时间戳和区块号
 
+存储中的时间戳和区块编号不需要是 uint256
 一个大小为 uint48 的时间戳可以工作数百万年。一个区块编号每 12 秒递增一次。这应该让你对合理的数字大小有所了解。
 

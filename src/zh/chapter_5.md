@@ -1,18 +1,17 @@
-# Calldata 优化
 
-以太坊对于 calldata 的零字节收取 4 gas，对于非零字节收取 16 gas。这在正常的函数调用和部署过程中都是成立的。因此，Solidity 优化器会尽可能使用零值。
+[以太坊](https://learnblockchain.cn/tags/以太坊?map=EVM)对于 calldata 的零字节收取 4 gas，对于非零字节收取 16 gas。这在正常的函数调用和部署过程中都是成立的。因此，[Solidity](https://learnblockchain.cn/course/93) 优化器会尽可能使用零值。
 
-## 1. （安全地）使用虚荣地址
+## 1. 使用虚荣地址
 
 使用具有前导零的虚荣地址更加便宜，这样可以节省 calldata 的 gas 成本。
 
-一个很好的例子是 OpenSea 的 [Seaport 合约](https://etherscan.io/address/0x00000000000000adc04c56bf30ac9d3c0aaf14dc#code)，其地址为：0x00000000000000ADc04C56Bf30aC9d3c0aAF14dC。
+一个很好的例子是 [OpenSea](https://learnblockchain.cn/tags/OpenSea) 的 [Seaport 合约](https://etherscan.io/address/0x00000000000000adc04c56bf30ac9d3c0aaf14dc#code)，其地址为：0x00000000000000ADc04C56Bf30aC9d3c0aAF14dC。
 
 直接调用该地址时不会节省 gas。然而，如果该合约地址作为函数的参数传递，由于 calldata 中有更多的零值，该函数调用将花费较少的 gas。
 
-对于将大量零值的外部账户地址作为函数参数传递也是如此，由于相同的原因可以节省 gas。
+对于将大量零值的外部[账户](https://learnblockchain.cn/tags/账户?map=EVM)地址作为函数参数传递也是如此，由于相同的原因可以节省 gas。
 
-只需注意，有人通过生成虚荣地址来攻击[钱包](https://www.halborn.com/blog/post/explained-the-profanity-address-generator-hack-september-2022)，这是由于生成时使用了不够随机的私钥。对于使用 create2 找到盐值来创建的智能合约虚荣地址，这个问题并不适用，因为智能合约没有私钥。
+只需注意，有人通过生成虚荣地址来攻击[钱包](https://www.halborn.com/blog/post/explained-the-profanity-address-generator-hack-september-2022)，这是由于生成时使用了不够随机的私钥。对于使用 create2 找到盐值来创建的智能合约虚荣地址，这个问题并不适用，因为[智能合约](https://learnblockchain.cn/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6)没有私钥。
 
 ## 2. 尽可能避免在 calldata 中使用有符号整数
 

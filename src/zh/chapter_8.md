@@ -1,6 +1,3 @@
-# 危险的优化技术
-
-
 如果你参加了一个 gas 优化竞赛，那么这些不寻常的设计模式可以帮助你，但在生产环境中使用它们是极不推荐的，或者至少应该极度谨慎。
 
 ## 1. 使用 gasprice() 或 msg.value 传递信息
@@ -9,7 +6,7 @@
 
 ## 2. 如果测试允许，操纵环境变量，如 coinbase() 或 block.number
 
-当然，在生产环境中这是行不通的，但它可以作为一种侧信道来修改智能合约的行为。
+当然，在生产环境中这是行不通的，但它可以作为一种侧信道来修改[智能合约](https://learnblockchain.cn/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6)的行为。
 
 ## 3. 使用 gasleft() 在关键点进行分支决策
 
@@ -27,8 +24,8 @@ send 和 transfer 之间的区别在于，如果转账失败，transfer 会回�
 
 ## 6. 外部库跳转
 
-Solidity 传统上使用4个字节和跳转表来确定要使用的函数。然而，你可以（非常不安全地！）将跳转目标作为 calldata 参数提供，将“函数选择器”减少到一个字节，并完全避免跳转表。更多信息可以在这个 [tweet](https://twitter.com/AmadiMichaels/status/1697405235948310627) 中看到。
+[Solidity](https://learnblockchain.cn/course/93) 传统上使用4个字节和跳转表来确定要使用的函数。然而，你可以（非常不安全地！）将跳转目标作为 calldata 参数提供，将“函数选择器”减少到一个字节，并完全避免跳转表。更多信息可以在这个 [tweet](https://twitter.com/AmadiMichaels/status/1697405235948310627) 中看到。
 
 ## 7. 在合约末尾添加字节码以创建高度优化的子程序
 
-一些计算密集型算法，例如哈希函数，最好使用原始字节码而不是 Solidity 甚至 Yul 来编写。例如，[Tornado Cash](https://www.rareskills.io/post/how-does-tornado-cash-work) 将 MiMC 哈希函数作为一个单独的智能合约，直接以原始字节码编写。通过将该字节码附加到实际合约并在它之间来回跳转，可以避免另一个智能合约的额外2600或100 gas 成本（冷或热访问）。这里有一个[使用 Huff 的概念验证](https://twitter.com/AmadiMichaels/status/1696263027920634044)。
+一些计算密集型算法，例如哈希函数，最好使用原始字节码而不是 [Solidity](https://learnblockchain.cn/course/93) 甚至 Yul 来编写。例如，[Tornado Cash](https://www.rareskills.io/post/how-does-tornado-cash-work) 将 MiMC 哈希函数作为一个单独的智能合约，直接以原始字节码编写。通过将该字节码附加到实际合约并在它之间来回跳转，可以避免另一个[智能合约](https://learnblockchain.cn/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6)的额外2600或100 gas 成本（冷或热访问）。这里有一个[使用 Huff 的概念验证](https://twitter.com/AmadiMichaels/status/1696263027920634044)。
