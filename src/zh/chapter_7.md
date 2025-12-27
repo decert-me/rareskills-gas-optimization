@@ -23,7 +23,7 @@
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract Require {
     function dontSplitRequireStatement(uint256 x, uint256 y) external pure returns (uint256) {
@@ -77,7 +77,7 @@ contract CustomErrorBoolEfficient {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract NamedReturn {
     function myFunc1(uint256 x, uint256 y) external pure returns (uint256) {
@@ -161,7 +161,7 @@ for (uint256 i; i < limit; ) {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 // times == 10 in both tests
 contract Loop1 {
@@ -199,7 +199,7 @@ contract Loop2 {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract Unnecessary_Typecasting {
     uint8 public num;
@@ -268,7 +268,7 @@ EVM 在函数调用时使用跳转表，并且具有较低十六进制顺序的�
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract FunctionWithLeadingZeros {
     uint256 public totalSupply;

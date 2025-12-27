@@ -16,7 +16,7 @@
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract Counter1 {
     uint256 public number;
@@ -50,7 +50,7 @@ contract Counter2 {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract GasSavingExample {
     uint160 public packedVariables;
@@ -122,7 +122,7 @@ contract NonGasSavingExample {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract Unpacked_Struct {
     struct unpackedStruct {
@@ -173,7 +173,7 @@ contract Packed_Struct {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract StringStorage1 {
     // Uses only one slot
@@ -207,7 +207,7 @@ contract StringStorage2 {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 import "forge-std/Test.sol";
 import "../src/StringLessThan32Bytes.sol";
@@ -313,7 +313,7 @@ contract EfficientString {
 
 上面的代码可以进一步优化，但保持这种方式使其更容易理解。
 
-## 6. 从不更新的变量应为不可变的或常量
+## 5. 从不更新的变量应为不可变的或常量
 
 在 Solidity 中，不打算更新的变量应该是常量或不可变的。
 
@@ -321,7 +321,7 @@ contract EfficientString {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract Constants {
     uint256 constant MAX_UINT256 = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
@@ -342,6 +342,75 @@ contract NoConstants {
 ```
 
 这样可以节省大量的 gas，因为我们不进行任何昂贵的存储读取操作。
+
+## 6. 使用瞬时存储（Transient Storage）
+
+瞬时存储（Transient Storage）是 2024年3月 Cancun 升级引入的新型存储方式。它使用两个新操作码：
+- `TSTORE`：写入瞬时数据（100 gas）
+- `TLOAD`：读取瞬时数据（100 gas）
+
+**关键特性：**
+- 数据仅在单个交易期间存在
+- 交易结束后自动清零
+- Gas 成本仅 100 gas（相比 SSTORE 的 22,100 gas，节省 **99.5%**）
+
+
+瞬时存储特别适合需要在**单个交易内**共享状态的场景：
+1. 重入锁（Reentrancy Guard）
+2. 闪电贷状态管理
+3. 批量操作的中间状态
+4. 跨合约调用的瞬时标记
+
+### 示例：高效的重入锁
+
+**❌ 传统方案（使用 SSTORE/SLOAD）**
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract TraditionalReentrancyGuard {
+    uint256 private _status;
+
+    modifier nonReentrant() {
+        require(_status != 2, "ReentrancyGuard: reentrant call");
+        _status = 2;  // SSTORE: 22,100 gas (首次) 或 2,900 gas
+        _;
+        _status = 1;  // SSTORE: 2,900 gas
+    }
+
+    function withdraw() public nonReentrant {
+        // 业务逻辑
+    }
+}
+// 总成本：首次调用 ~25,000 gas，后续 ~5,800 gas
+```
+
+**✅ 使用瞬时存储（Solidity 0.8.24+）**
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract TransientReentrancyGuard {
+    // 使用 transient 关键字声明瞬时存储变量
+    bool private transient _locked;
+
+    modifier nonReentrant() {
+        require(!_locked, "ReentrancyGuard: reentrant call");
+        _locked = true;   // TSTORE: 100 gas
+        _;
+        _locked = false;  // TSTORE: 100 gas
+    }
+
+    function withdraw() public nonReentrant {
+        // 业务逻辑
+    }
+}
+// 总成本：仅 200 gas（节省 96%+）
+```
+
+更多瞬时存储的详细内容和高级用法，请参考 [瞬时存储](https://learnblockchain.cn/article/22611)。
 
 ## 7. 使用映射而不是数组以避免长度检查
 
@@ -481,7 +550,7 @@ SSTORE3 实现了这样一个设计，即新部署的地址与我们提供的数
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract StoragePointerUnOptimized {
     struct User {

@@ -1,6 +1,5 @@
 # 汇编技巧
 
-
 不要假设编写汇编代码会自动导致更高效的代码。我们列出了编写汇编通常效果更好的领域，但你应始终测试非汇编版本。
 
 ## 1. 使用汇编来回滚并附带错误消息
@@ -155,7 +154,7 @@ XOR 也可以实现相同的效果，但要注意 XOR 也会将所有位翻转�
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract NormalAddressZeroCheck {
     function check(address _caller) public pure returns (bool) {
@@ -420,5 +419,6 @@ contract Called {
 ## 10. 通过检查最后一位而不是使用模运算符来测试一个数是偶数还是奇数
 
 传统的方法是通过执行 x % 2 == 0 来检查一个数是偶数还是奇数，其中 x 是待检查的数。你可以改为检查 x & uint256(1) == 0。其中 x 假设为 uint256。位与运算比模运算更加高效。在二进制中，最右边的位表示 "1"，而所有位向左都是 2 的倍数，即偶数。将一个偶数加上 "1" 会使其变为奇数。
+
 
 

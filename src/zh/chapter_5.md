@@ -24,7 +24,7 @@
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 contract CalldataContract {
     function getDataFromCalldata(bytes calldata data) public pure returns (bytes memory) {
         return data;
@@ -38,11 +38,12 @@ contract MemoryContract {
 }
 ```
 
-## 4. 考虑对 calldata 进行打包，尤其是在 L2 上
+## Cancun 升级后的 Calldata 优化策略
 
-Solidity 会自动对存储变量进行打包，但是在 calldata 中，对于那些本应该被打包的变量，其 abi 编码并不会进行打包。
+在 2024 Cancun 升级后，EIP-4844 引入的 Blob 交易，Blob 使用独立的 gas 计价机制, 并且费用大幅降低，L2 现在主要使用 Blob 交易发布数据到 L1，Blob 不区分零字节和非零字节。
+因此在 L2 网络：Calldata 优化重要性降低。
 
-这是一种相当极端的优化方式，会导致代码复杂度增加，但是如果一个函数接收大量的 calldata，这是值得考虑的。
 
-ABI 编码并不适用于每种数据表示方式，某些数据表示方式可以通过应用特定的方式进行更高效的编码。
+
+
 

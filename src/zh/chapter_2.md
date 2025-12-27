@@ -150,7 +150,7 @@ contract BurnerDeployer {
 
 ```
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract A {}
 
@@ -171,11 +171,51 @@ contract B {
 
 ## 4. 如果合约只用于一次性使用，则在构造函数中使用 selfdestruct
 
-有时，合约用于在一个事务中部署多个合约，这就需要在构造函数中执行。
+有时，合约用于在一个交易中部署多个合约，这就需要在构造函数中执行。
 
 如果合约的唯一用途是构造函数中的代码，则在操作结束时进行 selfdestruct 将节省 gas。
 
-根据 [EIP 6780](https://learnblockchain.cn/docs/eips/EIPS/eip-6780/) 只有在同一个交易中才可以使用。
+> **⚠️ 重要提示（2024 Cancun 升级 - EIP-6780）**：
+
+根据 [EIP-6780](https://learnblockchain.cn/docs/eips/EIPS/eip-6780/)（2024年3月 Cancun 升级），`SELFDESTRUCT` 的行为已被严格限制：
+
+**在 Cancun 升级之前：** `SELFDESTRUCT` 会删除合约代码，清除所有存储，转移 ETH 余额，退还部分 gas（24,000 gas）
+
+**在 Cancun 升级之后：**
+- **仅在同一交易内创建并销毁的合约**才保留完整的 `SELFDESTRUCT` 功能
+- 对于已存在的合约调用 `SELFDESTRUCT`， **不再**删除合约代码， **不再**清除存储，仍然转移 ETH 余额，**不再**退还 gas
+
+不过在在构造函数中使用 SELFDESTRUCT是仍然有效的：
+
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+contract ConstructorSelfDestruct {
+    constructor() payable {
+        // 执行一些初始化逻辑
+        _initialize();
+
+        // ✅ 在构造函数中自毁（同一交易内）
+        selfdestruct(payable(tx.origin));
+        // 合约代码和存储会被完全删除，节省部署成本
+    }
+
+    function _initialize() internal {
+        // 初始化逻辑
+    }
+}
+
+contract Factory {
+    function deployAndExecute() external payable {
+        // ✅ 部署并立即执行逻辑，然后自毁
+        new ConstructorSelfDestruct{value: msg.value}();
+        // 合约被完全删除，节省存储成本
+    }
+}
+```
+
 
 ## 5. 在选择内部函数和修饰器之间时要理解权衡
 
@@ -188,7 +228,7 @@ contract B {
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
+pragma solidity ^0.8.24;
 
 /** deployment gas cost: 195435
     gas per call:
@@ -293,7 +333,7 @@ pragma solidity 0.8.19;
 
 ```
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.24;
 
 contract CustomError {
     error InvalidAmount();
